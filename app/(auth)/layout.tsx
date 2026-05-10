@@ -4,6 +4,7 @@ import { ReactNode } from "react";
 import { useSession } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import AppShell from "./components/AppShell";
 
 /**
  * Protected layout for authenticated routes
@@ -32,5 +33,5 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
     return null;
   }
 
-  return <>{children}</>;
+  return <AppShell>{children}</AppShell>;
 }

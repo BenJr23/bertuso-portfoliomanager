@@ -22,6 +22,10 @@ model User {
   email         String
   emailVerified Boolean
   image         String?
+  description      String?
+  address       String?
+  phoneNumber   String?
+  linkedinLink  String?
   createdAt     DateTime
   updatedAt     DateTime
   sessions      Session[]
@@ -74,4 +78,87 @@ model Verification {
   updatedAt  DateTime?
 
   @@map("verification")
+}
+
+enum ToolCategory {
+  FRONTEND 
+  BACKEND
+  DATABASE
+  DEVOPS
+  TESTING
+  DOCUMENTATION
+  VERSION_CONTROL
+  API
+  MOBILE
+  CLOUD
+  MONITORING
+  SECURITY
+}
+
+model Tool {
+  id        String       @id @default(cuid())
+  name      String       @unique
+  picture   String?
+  category  ToolCategory
+  createdBy String
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+  creator   User         @relation(fields: [createdBy], references: [id], onDelete: Cascade)
+  frameworks Framework[]
+
+  @@map("tool")
+}
+
+model Framework {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  image     String?
+  createdBy String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  creator   User     @relation(fields: [createdBy], references: [id], onDelete: Cascade)
+  tools     Tool[]
+  projects  Project[]
+
+  @@map("framework")
+}
+
+model Project {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  imageUrl    String?
+  createdBy   String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  frameworkId String
+  framework   Framework @relation(fields: [frameworkId], references: [id], onDelete: Cascade)
+  creator     User      @relation(fields: [createdBy], references: [id], onDelete: Cascade)
+
+  @@map("project")
+}
+
+model Certification {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  image       String?
+  createdBy   String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  creator     User     @relation(fields: [createdBy], references: [id], onDelete: Cascade)
+
+  @@map("certification")
+}
+
+model AboutMe {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  createdBy   String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  creator     User     @relation(fields: [createdBy], references: [id], onDelete: Cascade)
+
+  @@map("about_me")
 }
