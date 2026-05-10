@@ -6,9 +6,9 @@ import { type FormEvent, useState, useEffect } from "react";
 import { signIn, useSession } from "@/lib/auth-client";
 
 const quickStats = [
-  { label: "Active mandates", value: "18" },
-  { label: "Tracked portfolios", value: "124" },
-  { label: "Alerts resolved", value: "97.8%" },
+  { label: "Active projects", value: "24" },
+  { label: "Total skills", value: "18+" },
+  { label: "Open source contrib", value: "156" },
 ];
 
 export default function Home() {
@@ -63,15 +63,15 @@ export default function Home() {
         <section className="flex flex-col justify-between px-6 py-10 sm:px-10 lg:px-16 lg:py-14">
           <div className="space-y-8">
             <div className="inline-flex items-center gap-3 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs uppercase tracking-[0.32em] text-emerald-200/90 backdrop-blur">
-              Bertuso portfolio manager
+              Bertuso - IT portfolio manager
             </div>
 
             <div className="max-w-2xl space-y-5">
               <h1 className="max-w-3xl text-4xl font-semibold leading-tight text-white sm:text-5xl lg:text-6xl">
-                One place for every portfolio, mandate, and rebalance.
+                Your professional portfolio, beautifully managed.
               </h1>
               <p className="max-w-xl text-base leading-7 text-slate-300 sm:text-lg">
-                Keep allocations, cash movements, and client activity in one calm workspace built for precise decision-making.
+                Showcase your projects, track your skills, and manage your tech career all in one elegant workspace built for developers.
               </p>
             </div>
 
@@ -90,20 +90,20 @@ export default function Home() {
 
           <div className="mt-10 grid gap-4 rounded-[2rem] border border-white/10 bg-slate-950/55 p-5 backdrop-blur-xl lg:grid-cols-[1.2fr_0.8fr]">
             <div className="space-y-3">
-              <p className="text-xs uppercase tracking-[0.3em] text-slate-400">Today&apos;s pulse</p>
-              <h2 className="text-xl font-semibold text-white">Markets are steady. Your book stays organized.</h2>
+              <p className="text-xs uppercase tracking-[0.3em] text-slate-400">Get started</p>
+              <h2 className="text-xl font-semibold text-white">Build and showcase your tech career.</h2>
               <p className="max-w-lg text-sm leading-6 text-slate-300">
-                Review drift, inspect exposure, and move quickly between client positions without losing context.
+                Create project showcases, track your skills, and let your portfolio do the talking to potential employers and collaborators.
               </p>
             </div>
             <div className="grid gap-3 text-sm text-slate-300">
               <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-                <p className="text-slate-400">Watchlist sync</p>
-                <p className="mt-1 text-white">Realtime from all linked accounts</p>
+                <p className="text-slate-400">Project portfolio</p>
+                <p className="mt-1 text-white">Display your best work</p>
               </div>
               <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-                <p className="text-slate-400">Allocation drift</p>
-                <p className="mt-1 text-white">3 portfolios need review</p>
+                <p className="text-slate-400">Skill tracking</p>
+                <p className="mt-1 text-white">Document your growth</p>
               </div>
             </div>
           </div>
@@ -113,9 +113,9 @@ export default function Home() {
           <div className="w-full max-w-md rounded-[2rem] border border-white/10 bg-slate-950/80 p-8 shadow-[0_30px_80px_rgba(2,6,23,0.7)] backdrop-blur-2xl sm:p-10">
             <div className="space-y-3">
               <p className="text-sm uppercase tracking-[0.3em] text-slate-400">Sign in</p>
-              <h2 className="text-2xl font-semibold text-white">Welcome back.</h2>
+              <h2 className="text-2xl font-semibold text-white">Access your portfolio.</h2>
               <p className="text-sm leading-6 text-slate-300">
-                Open your dashboard, review the day&apos;s activity, and get back to managing capital.
+                Sign in to manage your projects, track your skills, and showcase your technical journey.
               </p>
             </div>
 
@@ -130,7 +130,7 @@ export default function Home() {
                   type="email"
                   autoComplete="email"
                   required
-                  placeholder="you@firm.com"
+                  placeholder="you@developer.com"
                   className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-emerald-400/60 focus:bg-white/[0.08]"
                 />
               </div>

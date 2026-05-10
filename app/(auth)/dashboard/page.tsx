@@ -4,9 +4,9 @@ import { signOut, useSession } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 
 const portfolioHighlights = [
-  { label: "Net worth", value: "$4.82M", change: "+6.4%" },
-  { label: "Monthly inflow", value: "$214K", change: "+11.2%" },
-  { label: "Watchlist alerts", value: "8", change: "2 urgent" },
+  { label: "Projects completed", value: "24", change: "+3 this month" },
+  { label: "Skills mastered", value: "18", change: "3 new skills" },
+  { label: "Open source contrib", value: "156", change: "+42 commits" },
 ];
 
 export default function DashboardPage() {
@@ -26,12 +26,12 @@ export default function DashboardPage() {
         <header className="rounded-[2rem] border border-white/10 bg-slate-950/70 p-6 backdrop-blur-2xl sm:p-8">
           <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
             <div className="space-y-3">
-              <p className="text-xs uppercase tracking-[0.32em] text-slate-400">Portfolio command center</p>
+              <p className="text-xs uppercase tracking-[0.32em] text-slate-400">Portfolio hub</p>
               <h1 className="text-3xl font-semibold text-white sm:text-4xl">
-                Welcome back, {user.name || "Operator"}.
+                Welcome back, {user.name || "Developer"}.
               </h1>
               <p className="max-w-2xl text-sm leading-6 text-slate-300 sm:text-base">
-                Your book is live. Review performance, rebalance exposure, and move through client accounts without losing context.
+                Track your projects, showcase your skills, and manage your professional portfolio all in one place.
               </p>
             </div>
 
@@ -62,20 +62,20 @@ export default function DashboardPage() {
           <article className="rounded-[2rem] border border-white/10 bg-slate-950/70 p-6 backdrop-blur-2xl sm:p-8">
             <div className="flex items-start justify-between gap-4">
               <div>
-                <p className="text-xs uppercase tracking-[0.3em] text-slate-400">Today&apos;s focus</p>
-                <h2 className="mt-3 text-2xl font-semibold text-white">Exposure, allocation, and cash ready for review.</h2>
+                <p className="text-xs uppercase tracking-[0.3em] text-slate-400">This week</p>
+                <h2 className="mt-3 text-2xl font-semibold text-white">Keep your profile fresh and up to date.</h2>
               </div>
               <div className="rounded-2xl border border-emerald-400/20 bg-emerald-400/10 px-4 py-2 text-sm text-emerald-200">
-                14 open tasks
+                7 pending
               </div>
             </div>
 
             <div className="mt-8 grid gap-4 sm:grid-cols-2">
               {[
-                ["Pending trades", "6 orders need approval"],
-                ["Client notes", "3 updated this morning"],
-                ["Rebalance queue", "2 portfolios over target"],
-                ["Risk alerts", "Volatility above threshold"],
+                ["Update projects", "2 projects need documentation"],
+                ["Add testimonials", "1 new feedback to feature"],
+                ["Polish portfolio", "Review showcase page copy"],
+                ["Code cleanup", "Refactor outdated snippets"],
               ].map(([title, description]) => (
                 <div key={title} className="rounded-3xl border border-white/10 bg-white/5 p-5">
                   <p className="text-sm font-medium text-white">{title}</p>
@@ -86,20 +86,20 @@ export default function DashboardPage() {
           </article>
 
           <article className="rounded-[2rem] border border-white/10 bg-slate-950/70 p-6 backdrop-blur-2xl sm:p-8">
-            <p className="text-xs uppercase tracking-[0.3em] text-slate-400">Account</p>
+            <p className="text-xs uppercase tracking-[0.3em] text-slate-400">Profile</p>
             <div className="mt-4 space-y-3">
-              <h2 className="text-2xl font-semibold text-white">{user.name || "Portfolio manager"}</h2>
+              <h2 className="text-2xl font-semibold text-white">{user.name || "Developer"}</h2>
               <p className="text-sm text-slate-300">{user.email}</p>
             </div>
 
             <div className="mt-8 space-y-4 rounded-3xl border border-white/10 bg-white/5 p-5">
               <div>
-                <p className="text-sm text-slate-400">Last login</p>
-                <p className="mt-1 text-sm text-white">Just now</p>
+                <p className="text-sm text-slate-400">Portfolio status</p>
+                <p className="mt-1 text-sm text-white">Active & visible</p>
               </div>
               <div>
-                <p className="text-sm text-slate-400">Workspace status</p>
-                <p className="mt-1 text-sm text-white">Synced and ready</p>
+                <p className="text-sm text-slate-400">Profile views</p>
+                <p className="mt-1 text-sm text-white">284 this month</p>
               </div>
             </div>
           </article>
