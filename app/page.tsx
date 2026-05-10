@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { type FormEvent, useState } from "react";
-import { signIn } from "@/lib/auth-client";
+import { type FormEvent, useState, useEffect } from "react";
+import { signIn, useSession } from "@/lib/auth-client";
 
 const quickStats = [
   { label: "Active mandates", value: "18" },
@@ -13,8 +13,16 @@ const quickStats = [
 
 export default function Home() {
   const router = useRouter();
+  const { data: session, isPending } = useSession();
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Redirect authenticated users to dashboard
+  useEffect(() => {
+    if (!isPending && session) {
+      router.push("/dashboard");
+    }
+  }, [session, isPending, router]);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -35,6 +43,15 @@ export default function Home() {
     }
 
     router.push("/dashboard");
+  }
+
+  // Show loading state while checking authentication
+  if (isPending) {
+    return (
+      <main className="flex min-h-screen items-center justify-center">
+        <div className="text-slate-300">Loading...</div>
+      </main>
+    );
   }
 
   return (
