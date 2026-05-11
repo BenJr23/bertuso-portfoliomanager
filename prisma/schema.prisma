@@ -30,6 +30,11 @@ model User {
   updatedAt     DateTime
   sessions      Session[]
   accounts      Account[]
+  tools         Tool[]
+  frameworks    Framework[]
+  projects      Project[]
+  certifications Certification[]
+  aboutMes      AboutMe[]
 
   @@unique([email])
   @@map("user")
