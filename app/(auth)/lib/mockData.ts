@@ -17,6 +17,7 @@ export const mockUser = {
 export const mockAboutMe = [
   {
     id: "about-1",
+    category: "PERSONAL_BACKGROUND",
     title: "Professional Background",
     description:
       "Experienced software engineer specializing in modern web technologies and cloud architecture. Led multiple successful product launches and team initiatives.",
@@ -25,6 +26,7 @@ export const mockAboutMe = [
   },
   {
     id: "about-2",
+    category: "TECHNICAL_EXPERTISE",
     title: "Technical Expertise",
     description:
       "Deep expertise in React, Node.js, TypeScript, and cloud platforms. Passionate about building performant, accessible, and maintainable applications.",
@@ -33,6 +35,7 @@ export const mockAboutMe = [
   },
   {
     id: "about-3",
+    category: "WORK_PHILOSOPHY",
     title: "Philosophy",
     description:
       "Believer in clean code, continuous learning, and collaborative development. Always exploring new technologies and best practices.",

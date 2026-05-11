@@ -100,6 +100,14 @@ enum ToolCategory {
   SECURITY
 }
 
+enum AboutMeCategory {
+  PERSONAL_BACKGROUND
+  TECHNICAL_EXPERTISE
+  WORK_PHILOSOPHY
+  CAREER_HIGHLIGHTS
+  CONTINUOUS_LEARNING
+}
+
 model Tool {
   id        String       @id @default(cuid())
   name      String       @unique
@@ -158,6 +166,7 @@ model Certification {
 
 model AboutMe {
   id          String   @id @default(cuid())
+  category    AboutMeCategory
   title       String
   description String?
   createdBy   String
