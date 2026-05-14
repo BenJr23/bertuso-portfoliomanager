@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { addTool } from "@/app/_actions/tools/addtools";
-import { uploadToolImage } from "@/app/_actions/tools/uploadimage";
+import { uploadToolImage } from "@/lib/supabase-storage";
 
 interface AddToolsProps {
 	open: boolean;

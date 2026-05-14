@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { mockTools } from "../lib/mockData";
 import AddTools from "../components/modals/AddTools";
+import EditTools from "../components/modals/EditTools";
 import { getTools } from "@/app/_actions/tools/gettools";
 
 const categories = ["All", "Frontend", "Backend", "Database", "DevOps", "Testing", "Version Control", "Cloud"];
@@ -11,6 +12,8 @@ export default function ToolsPage() {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [tools, setTools] = useState<Array<{ id: string; name: string; picture: string | null; category: string }>>([]);
   const [isAddOpen, setIsAddOpen] = useState(false);
+  const [isEditOpen, setIsEditOpen] = useState(false);
+  const [editingTool, setEditingTool] = useState<{ id: string; name: string; category: string; picture: string | null } | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -52,6 +55,27 @@ export default function ToolsPage() {
     setTools((prev) => [newTool, ...prev]);
     setIsAddOpen(false);
     setSelectedCategory("All");
+  }
+
+  function handleEdit(tool: { id: string; name: string; picture?: string; category: string }) {
+    // Update the tool in the list
+    setTools((prev) =>
+      prev.map((t) => (t.id === tool.id ? { ...t, name: tool.name, category: tool.category, picture: tool.picture || null } : t))
+    );
+    setIsEditOpen(false);
+    setEditingTool(null);
+  }
+
+  function handleDelete() {
+    // Remove the deleted tool from the list
+    if (editingTool) {
+      setTools((prev) => prev.filter((t) => t.id !== editingTool.id));
+    }
+  }
+
+  function openEditModal(tool: { id: string; name: string; picture: string | null; category: string }) {
+    setEditingTool(tool);
+    setIsEditOpen(true);
   }
 
   return (
@@ -113,12 +137,31 @@ export default function ToolsPage() {
               <p className="mt-3 inline-flex rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-slate-300">
                 {tool.category}
               </p>
+              <div className="mt-4 flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => openEditModal(tool)}
+                  className="flex-1 rounded-lg bg-blue-500/20 px-3 py-2 text-xs font-medium text-blue-200 hover:bg-blue-500/30"
+                >
+                  Edit
+                </button>
+              </div>
             </article>
           ))}
         </div>
       )}
 
       <AddTools open={isAddOpen} onClose={() => setIsAddOpen(false)} onAdd={handleAdd} />
+      <EditTools
+        open={isEditOpen}
+        onClose={() => {
+          setIsEditOpen(false);
+          setEditingTool(null);
+        }}
+        onEdit={handleEdit}
+        onDelete={handleDelete}
+        tool={editingTool || undefined}
+      />
     </div>
   );
 }
