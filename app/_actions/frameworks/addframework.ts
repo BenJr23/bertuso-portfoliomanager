@@ -7,6 +7,7 @@ import prisma from "@/lib/prisma";
 interface AddFrameworkInput {
   name: string;
   image?: string | null;
+  toolIds?: string[];
 }
 
 interface AddFrameworkResult {
@@ -43,6 +44,7 @@ export async function addFramework(input: AddFrameworkInput): Promise<AddFramewo
       data: {
         name: input.name.trim(),
         image: input.image?.trim() || null,
+        tools: input.toolIds && input.toolIds.length > 0 ? { connect: input.toolIds.map((id) => ({ id })) } : undefined,
         createdBy: userId,
       },
     });

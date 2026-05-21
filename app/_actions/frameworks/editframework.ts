@@ -8,6 +8,7 @@ interface EditFrameworkInput {
   id: string;
   name: string;
   image?: string | null;
+  toolIds?: string[];
 }
 
 interface EditFrameworkResult {
@@ -52,6 +53,7 @@ export async function editFramework(input: EditFrameworkInput): Promise<EditFram
       data: {
         name: input.name.trim(),
         image: input.image?.trim() || null,
+        tools: typeof input.toolIds !== "undefined" ? { set: input.toolIds.map((id) => ({ id })) } : undefined,
       },
     });
 

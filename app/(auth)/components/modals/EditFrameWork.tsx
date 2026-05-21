@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { editFramework } from "@/app/_actions/frameworks/editframework";
 import { uploadAuthenticatedImage } from "@/lib/supabase-storage";
 import DeleteFrameWork from "./DeleteFrameWork";
+import AddToolsToFramework from "./AddToolsToFramework";
 
 interface FrameworkItem {
   id: string;
@@ -31,6 +32,7 @@ export default function EditFrameWork({ open, onClose, onEdit, onDelete, framewo
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [selectedToolIds, setSelectedToolIds] = useState<string[]>([]);
 
   useEffect(() => {
     if (framework && open) {
@@ -41,8 +43,27 @@ export default function EditFrameWork({ open, onClose, onEdit, onDelete, framewo
       setUploadError(null);
       setSelectedFile(null);
       setShowDeleteConfirm(false);
+      setSelectedToolIds([]);
     }
   }, [framework, open]);
+
+  useEffect(() => {
+    if (!framework?.id || !open) return;
+
+    let cancelled = false;
+    import("@/app/_actions/frameworks/getframeworktools").then(({ getFrameworkTools }) =>
+      getFrameworkTools(framework.id)
+        .then((res) => {
+          if (cancelled) return;
+          if (res?.success && res.data) setSelectedToolIds(res.data);
+        })
+        .catch(() => {}),
+    );
+
+    return () => {
+      cancelled = true;
+    };
+  }, [framework?.id, open]);
 
   function resetForm() {
     setName("");
@@ -110,6 +131,7 @@ export default function EditFrameWork({ open, onClose, onEdit, onDelete, framewo
         id: framework?.id || "",
         name: name.trim(),
         image: image.trim() || null,
+        toolIds: selectedToolIds,
       });
 
       if (!result.success || !result.data) {
@@ -121,7 +143,7 @@ export default function EditFrameWork({ open, onClose, onEdit, onDelete, framewo
         id: result.data.id,
         name: result.data.name,
         image: result.data.image,
-        toolCount: framework?.toolCount ?? 0,
+        toolCount: selectedToolIds.length ?? framework?.toolCount ?? 0,
         projectCount: framework?.projectCount ?? 0,
       });
       resetForm();
@@ -202,6 +224,13 @@ export default function EditFrameWork({ open, onClose, onEdit, onDelete, framewo
               </button>
             </div>
             {uploadError && <p className="mt-2 text-xs text-red-400">{uploadError}</p>}
+          </div>
+
+          <div>
+            <AddToolsToFramework selected={selectedToolIds} onChange={setSelectedToolIds} />
+            {selectedToolIds.length > 0 && (
+              <p className="mt-2 text-xs text-slate-300">{selectedToolIds.length} tool(s) selected</p>
+            )}
           </div>
 
           {error && <p className="text-sm text-red-400">{error}</p>}

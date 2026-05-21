@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { addFramework } from "@/app/_actions/frameworks/addframework";
 import { uploadAuthenticatedImage } from "@/lib/supabase-storage";
+import AddToolsToFramework from "./AddToolsToFramework";
 
 interface AddFrameworkProps {
   open: boolean;
@@ -26,6 +27,7 @@ export default function AddFramework({ open, onClose, onAdd }: AddFrameworkProps
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [uploadedUrl, setUploadedUrl] = useState<string | null>(null);
+  const [selectedToolIds, setSelectedToolIds] = useState<string[]>([]);
 
   if (!open) return null;
 
@@ -39,6 +41,7 @@ export default function AddFramework({ open, onClose, onAdd }: AddFrameworkProps
     setPreviewUrl(null);
     setSelectedFile(null);
     setUploadedUrl(null);
+    setSelectedToolIds([]);
     onClose();
   }
 
@@ -100,6 +103,7 @@ export default function AddFramework({ open, onClose, onAdd }: AddFrameworkProps
       const result = await addFramework({
         name: name.trim(),
         image: image.trim() || null,
+        toolIds: selectedToolIds,
       });
 
       if (!result.success || !result.data) {
@@ -111,7 +115,7 @@ export default function AddFramework({ open, onClose, onAdd }: AddFrameworkProps
         id: result.data.id,
         name: result.data.name,
         image: result.data.image,
-        toolCount: 0,
+        toolCount: selectedToolIds.length,
         projectCount: 0,
       });
       resetForm();
@@ -223,6 +227,13 @@ export default function AddFramework({ open, onClose, onAdd }: AddFrameworkProps
                 </button>
               )}
             </>
+          )}
+        </div>
+
+        <div className="mb-3">
+          <AddToolsToFramework selected={selectedToolIds} onChange={setSelectedToolIds} />
+          {selectedToolIds.length > 0 && (
+            <p className="mt-2 text-xs text-slate-300">{selectedToolIds.length} tool(s) selected</p>
           )}
         </div>
 
