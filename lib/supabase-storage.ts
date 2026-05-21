@@ -25,6 +25,46 @@ interface UploadToolImageResult {
 }
 
 /**
+ * Upload a file from an authenticated server action to Supabase storage
+ * @param formData - FormData containing the file to upload
+ * @param folder - Storage folder name
+ * @returns Upload result with public URL or error message
+ */
+export async function uploadAuthenticatedImage(
+  formData: FormData,
+  folder: string
+): Promise<UploadFileResult> {
+  try {
+    // Verify session
+    const cookieStore = await cookies();
+    const session = await auth.api.getSession({
+      headers: { cookie: cookieStore.toString() },
+    });
+
+    if (!session) {
+      return { success: false, error: "Not authenticated." };
+    }
+
+    // Get file from form data
+    const file = formData.get("file") as File;
+    if (!file) {
+      return { success: false, error: "No file provided." };
+    }
+
+    // Upload using generic upload function
+    return uploadFile(file, { folder });
+  } catch (error: unknown) {
+    const message =
+      error instanceof Error ? error.message : "Failed to upload image.";
+    console.error("Authenticated upload error:", message);
+    return {
+      success: false,
+      error: message,
+    };
+  }
+}
+
+/**
  * Upload a file to Supabase storage
  * @param file - File to upload
  * @param options - Upload options (folder path, max size)
@@ -132,33 +172,5 @@ export async function uploadFile(
 export async function uploadToolImage(
   formData: FormData
 ): Promise<UploadToolImageResult> {
-  try {
-    // Verify session
-    const cookieStore = await cookies();
-    const session = await auth.api.getSession({
-      headers: { cookie: cookieStore.toString() },
-    });
-
-    if (!session) {
-      return { success: false, error: "Not authenticated." };
-    }
-
-    // Get file from form data
-    const file = formData.get("file") as File;
-    if (!file) {
-      return { success: false, error: "No file provided." };
-    }
-
-    // Upload using generic upload function
-    const result = await uploadFile(file, { folder: "tools" });
-    return result as UploadToolImageResult;
-  } catch (error: unknown) {
-    const message =
-      error instanceof Error ? error.message : "Failed to upload image.";
-    console.error("Upload tool image error:", message);
-    return {
-      success: false,
-      error: message,
-    };
-  }
+  return uploadAuthenticatedImage(formData, "tools");
 }
