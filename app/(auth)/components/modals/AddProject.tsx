@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useState, type FormEvent } from "react";
 import { addProject } from "@/app/_actions/projects/addproject";
 import { uploadAuthenticatedImage } from "@/lib/supabase-storage";
@@ -185,7 +184,7 @@ export default function AddProject({ open, onClose, onAdd, frameworks }: AddProj
 
             {uploadedUrl ? (
               <div className="flex flex-col items-center gap-2 rounded-2xl border border-emerald-400/20 bg-emerald-500/10 p-3">
-                <Image src={uploadedUrl} alt="Uploaded project" width={80} height={80} className="h-20 w-20 rounded-2xl border border-emerald-400/20 object-cover" />
+                <img src={uploadedUrl} alt="Uploaded project" className="h-20 w-20 rounded-2xl border border-emerald-400/20 object-cover" />
                 <p className="text-xs text-emerald-200">Project image uploaded</p>
                 <button
                   type="button"
@@ -215,7 +214,7 @@ export default function AddProject({ open, onClose, onAdd, frameworks }: AddProj
                 {previewUrl ? (
                   <div className="flex flex-col gap-2">
                     <div className="flex items-center justify-center rounded-2xl border border-white/10 bg-white/5 p-2">
-                      <Image src={previewUrl} alt="Preview" width={80} height={80} className="h-20 w-20 rounded-2xl object-cover" />
+                      <img src={previewUrl} alt="Preview" className="h-20 w-20 rounded-2xl object-cover" />
                     </div>
                     <div className="flex gap-2">
                       <button

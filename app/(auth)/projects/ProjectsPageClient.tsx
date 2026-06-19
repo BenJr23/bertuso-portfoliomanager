@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useMemo, useState } from "react";
 import AddProject from "../components/modals/AddProject";
 import DeleteProject from "../components/modals/DeleteProject";
@@ -124,7 +123,7 @@ export default function ProjectsPageClient({ initialProjects, initialFrameworks,
                 }`}
               >
                 {framework.id !== "ALL" && framework.image ? (
-                  <Image src={framework.image} alt={framework.name} width={16} height={16} className="h-4 w-4 rounded-full object-cover" />
+                  <img src={framework.image} alt={framework.name} className="h-4 w-4 rounded-full object-cover" />
                 ) : null}
                 {framework.name}
               </button>
@@ -160,9 +159,7 @@ export default function ProjectsPageClient({ initialProjects, initialFrameworks,
             >
               <div className="aspect-video border-b border-white/10 bg-white/5">
                 {project.imageUrl ? (
-                  <div className="relative h-full w-full">
-                    <Image src={project.imageUrl} alt={project.name} fill className="object-cover" />
-                  </div>
+                  <img src={project.imageUrl} alt={project.name} className="h-full w-full object-cover" />
                 ) : (
                   <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-emerald-400/10 via-slate-950 to-slate-900">
                     <span className="text-sm uppercase tracking-[0.32em] text-slate-400">No image</span>

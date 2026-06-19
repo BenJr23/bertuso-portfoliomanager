@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useState, type FormEvent } from "react";
 import { editProject } from "@/app/_actions/projects/editproject";
 import { uploadAuthenticatedImage } from "@/lib/supabase-storage";
@@ -179,7 +178,7 @@ export default function EditProject({ open, onClose, onEdit, onDelete, project, 
             />
             {previewUrl ? (
               <div className="mt-3 flex h-20 w-20 items-center justify-center rounded-2xl border border-white/10 bg-white/5">
-                <Image src={previewUrl} alt="Preview" width={56} height={56} className="h-14 w-14 object-contain" />
+                <img src={previewUrl} alt="Preview" className="h-14 w-14 object-contain" />
               </div>
             ) : null}
             <div className="mt-3 flex gap-2">
