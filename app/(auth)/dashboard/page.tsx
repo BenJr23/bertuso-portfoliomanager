@@ -1,80 +1,70 @@
-"use client";
+import { getDashboard } from "@/app/_actions/dashboard/getdashboard";
 
-import { mockFrameworks, mockProjects, mockTools } from "../lib/mockData";
+export default async function DashboardPage() {
+  const result = await getDashboard();
 
-const highlights = [
-  { label: "Projects completed", value: "24", change: "+3 this month" },
-  { label: "Skills mastered", value: "18", change: "3 new skills" },
-  { label: "Open source contrib", value: "156", change: "+42 commits" },
-];
+  if (!result.success || !result.data) {
+    return (
+      <div className="rounded-[2rem] border border-red-400/20 bg-red-500/10 p-6 text-sm text-red-200">
+        {result.error || "Failed to load dashboard."}
+      </div>
+    );
+  }
 
-const updates = [
-  ["Updated profile", "Added phone number and LinkedIn link"],
-  ["Published project", "Released a new portfolio case study"],
-  ["Added framework", "Included Next.js and React Native"],
-  ["Tracked tools", "Documented frontend and backend stack"],
-];
+  const { userName, stats, updates } = result.data;
 
-export default function DashboardPage() {
   return (
     <div className="space-y-6">
-      <section className="grid gap-4 md:grid-cols-3">
-        {highlights.map((highlight) => (
-          <article
-            key={highlight.label}
-            className="rounded-[1.75rem] border border-white/10 bg-white/6 p-6 backdrop-blur-xl"
-          >
-            <p className="text-sm text-slate-400">{highlight.label}</p>
-            <p className="mt-4 text-3xl font-semibold text-white">{highlight.value}</p>
-            <p className="mt-2 text-sm text-emerald-300">{highlight.change}</p>
+      <section className="rounded-[2rem] border border-white/10 bg-slate-950/70 p-6 backdrop-blur-2xl sm:p-8">
+        <p className="text-xs uppercase tracking-[0.3em] text-slate-400">Portfolio Control</p>
+        <div className="mt-3 flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
+          <div className="max-w-2xl">
+            <h1 className="text-3xl font-semibold text-white">Welcome back, {userName}.</h1>
+            <p className="mt-3 text-sm leading-6 text-slate-300">
+              This dashboard shows only the live portfolio data you manage here: tools, frameworks, projects, and certifications.
+            </p>
+          </div>
+          <div className="rounded-2xl border border-emerald-400/20 bg-emerald-400/10 px-4 py-2 text-sm text-emerald-200">
+            Live data
+          </div>
+        </div>
+      </section>
+
+      <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        {stats.map((stat) => (
+          <article key={stat.label} className="rounded-[1.75rem] border border-white/10 bg-slate-950/70 p-6 backdrop-blur-2xl">
+            <p className="text-sm text-slate-400">{stat.label}</p>
+            <p className="mt-4 text-3xl font-semibold text-white">{stat.value}</p>
+            <p className="mt-2 text-sm text-slate-300">{stat.suffix}</p>
           </article>
         ))}
       </section>
 
-      <section className="grid gap-6 lg:grid-cols-[1.25fr_0.75fr]">
-        <article className="rounded-[2rem] border border-white/10 bg-slate-950/70 p-6 backdrop-blur-2xl sm:p-8">
-          <div className="flex items-start justify-between gap-4">
-            <div>
-              <p className="text-xs uppercase tracking-[0.3em] text-slate-400">This week</p>
-              <h2 className="mt-3 text-2xl font-semibold text-white">Keep your portfolio fresh and up to date.</h2>
-            </div>
-            <div className="rounded-2xl border border-emerald-400/20 bg-emerald-400/10 px-4 py-2 text-sm text-emerald-200">
-              7 pending
-            </div>
+      <section className="rounded-[2rem] border border-white/10 bg-slate-950/70 p-6 backdrop-blur-2xl sm:p-8">
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <p className="text-xs uppercase tracking-[0.3em] text-slate-400">Recent activity</p>
+            <h2 className="mt-3 text-2xl font-semibold text-white">Latest portfolio updates</h2>
           </div>
+        </div>
 
-          <div className="mt-8 grid gap-4 sm:grid-cols-2">
-            {updates.map(([title, description]) => (
-              <div key={title} className="rounded-3xl border border-white/10 bg-white/5 p-5">
-                <p className="text-sm font-medium text-white">{title}</p>
-                <p className="mt-2 text-sm leading-6 text-slate-300">{description}</p>
+        <div className="mt-6 grid gap-4 md:grid-cols-2">
+          {updates.length === 0 ? (
+            <div className="rounded-3xl border border-white/10 bg-white/5 p-5 text-sm text-slate-300 md:col-span-2">
+              No updates yet. Add a tool, framework, project, or certification to populate this area.
+            </div>
+          ) : (
+            updates.map((update) => (
+              <div key={`${update.title}-${update.description}`} className="rounded-3xl border border-white/10 bg-white/5 p-5">
+                <div className="flex items-start justify-between gap-3">
+                  <p className="text-sm font-medium text-white">{update.title}</p>
+                  <p className="text-[10px] uppercase tracking-[0.24em] text-slate-500">{update.updatedAt}</p>
+                </div>
+                <p className="mt-2 text-sm leading-6 text-slate-300">{update.description}</p>
               </div>
-            ))}
-          </div>
-        </article>
-
-        <article className="rounded-[2rem] border border-white/10 bg-slate-950/70 p-6 backdrop-blur-2xl sm:p-8">
-          <p className="text-xs uppercase tracking-[0.3em] text-slate-400">Workspace</p>
-          <div className="mt-4 space-y-3">
-            <h2 className="text-2xl font-semibold text-white">Portfolio overview</h2>
-            <p className="text-sm text-slate-300">A quick snapshot of your current content library.</p>
-          </div>
-
-          <div className="mt-8 space-y-4 rounded-3xl border border-white/10 bg-white/5 p-5">
-            <div>
-              <p className="text-sm text-slate-400">Tools tracked</p>
-              <p className="mt-1 text-sm text-white">{mockTools.length} documented skills</p>
-            </div>
-            <div>
-              <p className="text-sm text-slate-400">Frameworks tracked</p>
-              <p className="mt-1 text-sm text-white">{mockFrameworks.length} reusable stacks</p>
-            </div>
-            <div>
-              <p className="text-sm text-slate-400">Projects tracked</p>
-              <p className="mt-1 text-sm text-white">{mockProjects.length} showcased projects</p>
-            </div>
-          </div>
-        </article>
+            ))
+          )}
+        </div>
       </section>
     </div>
   );

@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { mockTools } from "../lib/mockData";
 import AddTools from "../components/modals/AddTools";
 import EditTools from "../components/modals/EditTools";
 import { getTools } from "@/app/_actions/tools/gettools";
@@ -131,7 +130,11 @@ export default function ToolsPage() {
               className="rounded-[1.75rem] border border-white/10 bg-slate-950/70 p-6 text-center backdrop-blur-2xl transition hover:border-emerald-400/20 hover:bg-slate-900/70"
             >
               <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl border border-white/10 bg-white/5">
-                <img src={tool.picture || "/"} alt={tool.name} className="h-10 w-10 object-contain" />
+                {tool.picture ? (
+                  <img src={tool.picture} alt={tool.name} className="h-10 w-10 object-contain" />
+                ) : (
+                  <span className="text-xl font-semibold text-slate-300">{tool.name.charAt(0)}</span>
+                )}
               </div>
               <h3 className="text-base font-semibold text-white">{tool.name}</h3>
               <p className="mt-3 inline-flex rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-slate-300">
