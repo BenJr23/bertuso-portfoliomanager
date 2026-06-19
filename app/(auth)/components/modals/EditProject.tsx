@@ -1,7 +1,9 @@
 "use client";
 
+import Image from "next/image";
 import { useState, type FormEvent } from "react";
 import { editProject } from "@/app/_actions/projects/editproject";
+import { uploadAuthenticatedImage } from "@/lib/supabase-storage";
 import type { ProjectFrameworkOption, ProjectRecord } from "@/app/_actions/projects/shared";
 
 interface EditProjectProps {
@@ -20,8 +22,59 @@ export default function EditProject({ open, onClose, onEdit, onDelete, project, 
   const [frameworkId, setFrameworkId] = useState(project?.frameworkId ?? frameworks[0]?.id ?? "");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(project?.imageUrl ?? null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [uploadedUrl, setUploadedUrl] = useState<string | null>(project?.imageUrl ?? null);
 
   if (!open || !project) return null;
+
+  const currentProject: ProjectRecord = project;
+
+  function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    setSelectedFile(file);
+    const reader = new FileReader();
+    reader.onload = (readerEvent) => {
+      setPreviewUrl(readerEvent.target?.result as string);
+    };
+    reader.readAsDataURL(file);
+  }
+
+  async function handleUploadToSupabase() {
+    if (!selectedFile) {
+      setUploadError("No file selected.");
+      return;
+    }
+
+    setUploadError(null);
+    setIsUploading(true);
+
+    try {
+      const formData = new FormData();
+      formData.append("file", selectedFile);
+
+      const result = await uploadAuthenticatedImage(formData, "projects");
+
+      if (!result.success) {
+        setUploadError(result.error || "Upload failed.");
+        return;
+      }
+
+      setImageUrl(result.url || "");
+      setUploadedUrl(result.url || "");
+      setPreviewUrl(result.url || "");
+      setSelectedFile(null);
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "An error occurred during upload.";
+      setUploadError(message);
+    } finally {
+      setIsUploading(false);
+    }
+  }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -35,7 +88,7 @@ export default function EditProject({ open, onClose, onEdit, onDelete, project, 
     setLoading(true);
     try {
       const result = await editProject({
-        id: project.id,
+        id: currentProject.id,
         name: name.trim(),
         description: description.trim() || undefined,
         imageUrl: imageUrl.trim() || undefined,
@@ -113,6 +166,48 @@ export default function EditProject({ open, onClose, onEdit, onDelete, project, 
               onChange={(event) => setImageUrl(event.target.value)}
               className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-emerald-400/30"
             />
+          </div>
+
+          <div>
+            <label className="mb-2 block text-xs uppercase tracking-[0.24em] text-slate-400">Photo</label>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleFileChange}
+              className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-slate-400 focus:outline-none"
+              disabled={isUploading}
+            />
+            {previewUrl ? (
+              <div className="mt-3 flex h-20 w-20 items-center justify-center rounded-2xl border border-white/10 bg-white/5">
+                <Image src={previewUrl} alt="Preview" width={56} height={56} className="h-14 w-14 object-contain" />
+              </div>
+            ) : null}
+            <div className="mt-3 flex gap-2">
+              <button
+                type="button"
+                onClick={handleUploadToSupabase}
+                disabled={isUploading}
+                className="flex-1 rounded-2xl bg-emerald-500/20 px-4 py-2 text-sm font-medium text-emerald-200 hover:bg-emerald-500/30 disabled:opacity-50"
+              >
+                {isUploading ? "Uploading..." : "Upload Image"}
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setImageUrl("");
+                  setPreviewUrl(null);
+                  setSelectedFile(null);
+                  setUploadError(null);
+                }}
+                className="rounded-2xl border border-white/10 px-4 py-2 text-sm font-medium text-slate-300 hover:bg-white/5"
+              >
+                Clear
+              </button>
+            </div>
+            {uploadError ? <p className="mt-2 text-xs text-red-400">{uploadError}</p> : null}
+            {uploadedUrl ? (
+              <p className="mt-2 text-xs text-emerald-200">Image uploaded to bucket</p>
+            ) : null}
           </div>
 
           <div>

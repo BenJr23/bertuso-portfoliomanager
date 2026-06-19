@@ -17,12 +17,14 @@ export default function DeleteProject({ open, onClose, onDelete, project }: Dele
 
   if (!open || !project) return null;
 
+  const currentProject: ProjectRecord = project;
+
   async function handleDelete() {
     setError(null);
     setLoading(true);
 
     try {
-      const result = await deleteProject(project.id);
+      const result = await deleteProject(currentProject.id);
 
       if (!result.success) {
         setError(result.error || "Failed to delete project.");
@@ -46,7 +48,7 @@ export default function DeleteProject({ open, onClose, onDelete, project }: Dele
         <p className="text-[10px] uppercase tracking-[0.32em] text-slate-500">Danger Zone</p>
         <h3 className="mt-2 text-2xl font-semibold text-white">Delete this project?</h3>
         <p className="mt-4 text-sm leading-6 text-slate-300">
-          This will permanently remove <span className="font-semibold text-white">{project.name}</span> from the portfolio.
+          This will permanently remove <span className="font-semibold text-white">{currentProject.name}</span> from the portfolio.
         </p>
         <p className="mt-2 text-sm text-slate-400">This action cannot be undone.</p>
 
