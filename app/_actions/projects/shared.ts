@@ -1,0 +1,35 @@
+export interface ProjectFrameworkOption {
+  id: string;
+  name: string;
+  image: string | null;
+}
+
+export interface ProjectRecord {
+  id: string;
+  name: string;
+  description: string | null;
+  imageUrl: string | null;
+  frameworkId: string;
+  framework: ProjectFrameworkOption;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ProjectFormValues {
+  name: string;
+  description: string;
+  imageUrl: string;
+  frameworkId: string;
+}
+
+export function getSessionUserId(session: unknown) {
+  const typedSession = session as {
+    user?: {
+      id?: string;
+    };
+    userId?: string;
+    id?: string;
+  };
+
+  return typedSession.user?.id ?? typedSession.userId ?? typedSession.id;
+}
