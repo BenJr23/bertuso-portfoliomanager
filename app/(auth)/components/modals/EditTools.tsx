@@ -18,7 +18,7 @@ interface EditToolsProps {
   };
 }
 
-const categories = ["Frontend", "Backend", "Database", "DevOps", "Testing", "Documentation", "Version Control", "API", "Mobile", "Cloud", "Monitoring", "Security"];
+const categories = ["Frontend", "Backend", "Database", "DevOps", "Testing", "Documentation", "Version Control", "API", "Mobile", "Cloud", "Monitoring", "Security", "Caching Layer", "ORM", "Task Scheduling", "Backend Automation"];
 
 export default function EditTools({ open, onClose, onEdit, onDelete, tool }: EditToolsProps) {
   const [name, setName] = useState(tool?.name || "");
@@ -54,6 +54,12 @@ export default function EditTools({ open, onClose, onEdit, onDelete, tool }: Edi
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+
+    if (!tool?.id) {
+      setError("Tool ID is missing. Please close and try again.");
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -76,7 +82,7 @@ export default function EditTools({ open, onClose, onEdit, onDelete, tool }: Edi
 
       // Update tool
       const result = await editTool({
-        id: tool?.id || "",
+        id: tool.id,
         name,
         category,
         picture: pictureUrl,
@@ -84,7 +90,7 @@ export default function EditTools({ open, onClose, onEdit, onDelete, tool }: Edi
 
       if (result.success) {
         onEdit({
-          id: tool?.id || "",
+          id: tool.id,
           name,
           category,
           picture: pictureUrl,

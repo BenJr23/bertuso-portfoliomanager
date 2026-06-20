@@ -98,6 +98,10 @@ enum ToolCategory {
   CLOUD
   MONITORING
   SECURITY
+  CACHING_LAYER
+  ORM
+  TASK_SCHEDULING
+  BACKEND_AUTOMATION
 }
 
 enum AboutMeCategory {

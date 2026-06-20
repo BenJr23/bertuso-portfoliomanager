@@ -5,7 +5,7 @@ import AddTools from "../components/modals/AddTools";
 import EditTools from "../components/modals/EditTools";
 import { getTools } from "@/app/_actions/tools/gettools";
 
-const categories = ["All", "Frontend", "Backend", "Database", "DevOps", "Testing", "Version Control", "Cloud"];
+const categories = ["All", "Frontend", "Backend", "Database", "DevOps", "Testing", "Documentation", "Version Control", "API", "Mobile", "Cloud", "Monitoring", "Security", "Caching Layer", "ORM", "Task Scheduling", "Backend Automation"];
 
 export default function ToolsPage() {
   const [selectedCategory, setSelectedCategory] = useState("All");
@@ -44,16 +44,16 @@ export default function ToolsPage() {
   );
 
   function handleAdd(tool: { name: string; picture?: string; category: string }) {
-    // Add the new tool to the list immediately (optimistic update)
-    const newTool = {
-      id: Date.now().toString(),
-      name: tool.name,
-      picture: tool.picture || null,
-      category: tool.category,
-    };
-    setTools((prev) => [newTool, ...prev]);
+    // Optionally add the new tool to the list immediately (optimistic update)
+    // In this case, we skip it to avoid ID mismatches. The tool list will refresh on next load.
     setIsAddOpen(false);
     setSelectedCategory("All");
+    // Optionally: reload tools to reflect new addition
+    // (Uncomment if you want instant feedback)
+    // void (async () => {
+    //   const result = await getTools();
+    //   if (result.success && result.data) setTools(result.data);
+    // })();
   }
 
   function handleEdit(tool: { id: string; name: string; picture?: string; category: string }) {
