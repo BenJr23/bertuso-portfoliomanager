@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { editTool } from "@/app/_actions/tools/edittools";
 import { uploadToolImage } from "@/lib/supabase-storage";
 import DeleteTools from "./DeleteTools";
@@ -28,6 +28,16 @@ export default function EditTools({ open, onClose, onEdit, onDelete, tool }: Edi
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+
+  useEffect(() => {
+    if (!open || !tool) return;
+    setName(tool.name);
+    setCategory(tool.category);
+    setPicture(null);
+    setPreviewUrl(tool.picture || "");
+    setError(null);
+    setShowDeleteConfirm(false);
+  }, [open, tool]);
 
   const handlePictureChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -125,12 +135,12 @@ export default function EditTools({ open, onClose, onEdit, onDelete, tool }: Edi
             <select
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white focus:border-emerald-400/50 focus:outline-none"
+              className="w-full rounded-2xl border border-white/10 bg-slate-950/80 px-4 py-3 text-white focus:border-emerald-400/50 focus:outline-none"
               required
             >
               <option value="">Select a category</option>
               {categories.map((cat) => (
-                <option key={cat} value={cat}>
+                <option key={cat} value={cat} className="bg-slate-950 text-white">
                   {cat}
                 </option>
               ))}

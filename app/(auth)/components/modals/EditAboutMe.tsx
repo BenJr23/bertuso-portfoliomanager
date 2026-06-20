@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { editAboutMe } from "@/app/_actions/aboutme/editaboutme";
 import { aboutMeCategoryOptions, type AboutMeRecord } from "@/app/_actions/aboutme/shared";
 
@@ -17,6 +17,14 @@ export default function EditAboutMe({ open, onClose, onSaved, aboutMe }: EditAbo
 	const [description, setDescription] = useState(aboutMe?.description ?? "");
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
+
+	useEffect(() => {
+		if (!open || !aboutMe) return;
+		setCategory(aboutMe.category ?? aboutMeCategoryOptions[0].value);
+		setTitle(aboutMe.title ?? "");
+		setDescription(aboutMe.description ?? "");
+		setError(null);
+	}, [open, aboutMe]);
 
 	if (!open || !aboutMe) return null;
 

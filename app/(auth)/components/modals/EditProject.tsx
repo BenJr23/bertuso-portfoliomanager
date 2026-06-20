@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type FormEvent, type KeyboardEvent } from "react";
+import { useEffect, useState, type FormEvent, type KeyboardEvent } from "react";
 import { editProject } from "@/app/_actions/projects/editproject";
 import { uploadAuthenticatedImage } from "@/lib/supabase-storage";
 import type { ProjectFrameworkOption, ProjectRecord } from "@/app/_actions/projects/shared";
@@ -28,6 +28,21 @@ export default function EditProject({ open, onClose, onEdit, onDelete, project, 
   const [previewUrl, setPreviewUrl] = useState<string | null>(project?.imageUrl ?? null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [uploadedUrl, setUploadedUrl] = useState<string | null>(project?.imageUrl ?? null);
+
+  useEffect(() => {
+    if (!open || !project) return;
+    setName(project.name ?? "");
+    setDescription(project.description ?? "");
+    setRoles(project.roles ?? []);
+    setRoleInput("");
+    setImageUrl(project.imageUrl ?? "");
+    setFrameworkId(project.frameworkId ?? frameworks[0]?.id ?? "");
+    setPreviewUrl(project.imageUrl ?? null);
+    setSelectedFile(null);
+    setUploadedUrl(project.imageUrl ?? null);
+    setError(null);
+    setUploadError(null);
+  }, [open, project, frameworks]);
 
   if (!open || !project) return null;
 
