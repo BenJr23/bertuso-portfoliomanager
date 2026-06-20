@@ -18,7 +18,7 @@ interface EditToolsProps {
   };
 }
 
-const categories = ["Frontend", "Backend", "Database", "DevOps", "Testing", "Documentation", "Version Control", "API", "Mobile", "Cloud", "Monitoring", "Security", "Caching Layer", "ORM", "Task Scheduling", "Backend Automation"];
+const categories = ["Frontend", "Backend", "Database", "DevOps", "Testing", "Version Control", "Language", "UI Toolkit", "API", "Mobile", "Cloud", "Monitoring", "Security", "Caching Layer", "ORM", "Task Scheduling", "Backend Automation"];
 
 export default function EditTools({ open, onClose, onEdit, onDelete, tool }: EditToolsProps) {
   const [name, setName] = useState(tool?.name || "");

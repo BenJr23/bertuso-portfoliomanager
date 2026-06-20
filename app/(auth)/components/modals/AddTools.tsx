@@ -10,7 +10,7 @@ interface AddToolsProps {
 	onAdd: (tool: { name: string; picture?: string; category: string }) => void;
 }
 
-const categoryOptions = ["Frontend", "Backend", "Database", "DevOps", "Testing", "Documentation", "Version Control", "API", "Mobile", "Cloud", "Monitoring", "Security", "Caching Layer", "ORM", "Task Scheduling", "Backend Automation"];
+const categoryOptions = ["Frontend", "Backend", "Database", "DevOps", "Testing", "Version Control", "Language", "UI Toolkit", "API", "Mobile", "Cloud", "Monitoring", "Security", "Caching Layer", "ORM", "Task Scheduling", "Backend Automation"];
 
 export default function AddTools({ open, onClose, onAdd }: AddToolsProps) {
 	const [name, setName] = useState("");

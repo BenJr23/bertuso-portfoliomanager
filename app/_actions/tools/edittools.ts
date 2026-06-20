@@ -55,6 +55,35 @@ export async function editTool(input: EditToolInput): Promise<EditToolResult> {
     // Update tool in database
     // Convert category string to enum format (e.g., "Version Control" -> "VERSION_CONTROL")
     const categoryEnum = input.category.toUpperCase().replace(/\s+/g, "_");
+
+    // Validate category against allowed enum values to provide clearer errors
+    const allowedCategories = [
+      "FRONTEND",
+      "BACKEND",
+      "DATABASE",
+      "DEVOPS",
+      "TESTING",
+      "VERSION_CONTROL",
+      "LANGUAGE",
+      "UI_TOOLKIT",
+      "API",
+      "MOBILE",
+      "CLOUD",
+      "MONITORING",
+      "SECURITY",
+      "CACHING_LAYER",
+      "ORM",
+      "TASK_SCHEDULING",
+      "BACKEND_AUTOMATION",
+    ];
+
+    if (!allowedCategories.includes(categoryEnum)) {
+      return {
+        success: false,
+        error: `Invalid category '${input.category}'. Allowed categories: ${allowedCategories.join(", ")}`,
+      };
+    }
+
     const updatedTool = await prisma.tool.update({
       where: { id: input.id },
       data: {

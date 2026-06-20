@@ -51,6 +51,34 @@ export async function addTool(input: AddToolInput): Promise<AddToolResult> {
     // Map human-friendly category (e.g. "Version Control") to enum value (VERSION_CONTROL)
     const categoryEnum = input.category.toUpperCase().replace(/\s+/g, "_");
 
+    // Validate category against allowed enum values to provide clearer errors
+    const allowedCategories = [
+      "FRONTEND",
+      "BACKEND",
+      "DATABASE",
+      "DEVOPS",
+      "TESTING",
+      "VERSION_CONTROL",
+      "LANGUAGE",
+      "UI_TOOLKIT",
+      "API",
+      "MOBILE",
+      "CLOUD",
+      "MONITORING",
+      "SECURITY",
+      "CACHING_LAYER",
+      "ORM",
+      "TASK_SCHEDULING",
+      "BACKEND_AUTOMATION",
+    ];
+
+    if (!allowedCategories.includes(categoryEnum)) {
+      return {
+        success: false,
+        error: `Invalid category '${input.category}'. Allowed categories: ${allowedCategories.join(", ")}`,
+      };
+    }
+
     // Create tool
     const created = await prisma.tool.create({
       data: {

@@ -5,7 +5,7 @@ import AddTools from "../components/modals/AddTools";
 import EditTools from "../components/modals/EditTools";
 import { getTools } from "@/app/_actions/tools/gettools";
 
-const categories = ["All", "Frontend", "Backend", "Database", "DevOps", "Testing", "Documentation", "Version Control", "API", "Mobile", "Cloud", "Monitoring", "Security", "Caching Layer", "ORM", "Task Scheduling", "Backend Automation"];
+const categories = ["All", "Frontend", "Backend", "Database", "DevOps", "Testing", "Version Control", "Language", "UI Toolkit", "API", "Mobile", "Cloud", "Monitoring", "Security", "Caching Layer", "ORM", "Task Scheduling", "Backend Automation"];
 
 export default function ToolsPage() {
   const [selectedCategory, setSelectedCategory] = useState("All");
