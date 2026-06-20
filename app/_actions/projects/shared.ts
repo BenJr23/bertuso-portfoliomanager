@@ -9,6 +9,7 @@ export interface ProjectRecord {
   name: string;
   description: string | null;
   imageUrl: string | null;
+  roles: string[];
   frameworkId: string;
   framework: ProjectFrameworkOption;
   createdAt: string;
@@ -19,6 +20,7 @@ export interface ProjectFormValues {
   name: string;
   description: string;
   imageUrl: string;
+  roles: string[];
   frameworkId: string;
 }
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useState, type FormEvent, type KeyboardEvent } from "react";
 import { editProject } from "@/app/_actions/projects/editproject";
 import { uploadAuthenticatedImage } from "@/lib/supabase-storage";
 import type { ProjectFrameworkOption, ProjectRecord } from "@/app/_actions/projects/shared";
@@ -17,6 +17,8 @@ interface EditProjectProps {
 export default function EditProject({ open, onClose, onEdit, onDelete, project, frameworks }: EditProjectProps) {
   const [name, setName] = useState(project?.name ?? "");
   const [description, setDescription] = useState(project?.description ?? "");
+  const [roles, setRoles] = useState<string[]>(project?.roles ?? []);
+  const [roleInput, setRoleInput] = useState("");
   const [imageUrl, setImageUrl] = useState(project?.imageUrl ?? "");
   const [frameworkId, setFrameworkId] = useState(project?.frameworkId ?? frameworks[0]?.id ?? "");
   const [loading, setLoading] = useState(false);
@@ -41,6 +43,29 @@ export default function EditProject({ open, onClose, onEdit, onDelete, project, 
       setPreviewUrl(readerEvent.target?.result as string);
     };
     reader.readAsDataURL(file);
+  }
+
+  function addRole() {
+    const value = roleInput.trim();
+    if (!value) return;
+    if (roles.includes(value)) {
+      setRoleInput("");
+      return;
+    }
+
+    setRoles((prev) => [...prev, value]);
+    setRoleInput("");
+  }
+
+  function removeRole(roleToRemove: string) {
+    setRoles((prev) => prev.filter((role) => role !== roleToRemove));
+  }
+
+  function handleRoleKeyDown(event: KeyboardEvent<HTMLInputElement>) {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      addRole();
+    }
   }
 
   async function handleUploadToSupabase() {
@@ -91,6 +116,7 @@ export default function EditProject({ open, onClose, onEdit, onDelete, project, 
         name: name.trim(),
         description: description.trim() || undefined,
         imageUrl: imageUrl.trim() || undefined,
+        roles,
         frameworkId,
       });
 
@@ -220,6 +246,48 @@ export default function EditProject({ open, onClose, onEdit, onDelete, project, 
               onChange={(event) => setDescription(event.target.value)}
               className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-emerald-400/30"
             />
+          </div>
+
+          <div>
+            <label className="mb-2 block text-xs uppercase tracking-[0.24em] text-slate-400" htmlFor="edit-project-roles">
+              Roles
+            </label>
+            <div className="grid gap-3">
+              <div className="flex flex-col gap-3 sm:flex-row">
+                <input
+                  id="edit-project-roles"
+                  value={roleInput}
+                  onChange={(event) => setRoleInput(event.target.value)}
+                  onKeyDown={handleRoleKeyDown}
+                  className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-emerald-400/30"
+                  placeholder="Add a role and press Enter"
+                />
+                <button
+                  type="button"
+                  onClick={addRole}
+                  className="rounded-2xl border border-emerald-400/20 bg-emerald-400/10 px-4 py-3 text-sm font-semibold text-emerald-100 transition hover:bg-emerald-400/20"
+                >
+                  Add Role
+                </button>
+              </div>
+              {roles.length > 0 ? (
+                <div className="flex flex-wrap gap-2">
+                  {roles.map((role) => (
+                    <button
+                      key={role}
+                      type="button"
+                      onClick={() => removeRole(role)}
+                      className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-sm text-slate-200 transition hover:bg-white/10"
+                    >
+                      <span>{role}</span>
+                      <span className="text-xs text-slate-400">×</span>
+                    </button>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-xs text-slate-500">Add one or more roles used in the project, such as Frontend, Backend, or DevOps.</p>
+              )}
+            </div>
           </div>
 
           {error ? <p className="text-sm text-red-300">{error}</p> : null}

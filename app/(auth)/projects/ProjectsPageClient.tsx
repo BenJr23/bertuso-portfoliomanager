@@ -179,6 +179,15 @@ export default function ProjectsPageClient({ initialProjects, initialFrameworks,
                 <p className="line-clamp-3 text-sm text-slate-400">
                   {project.description || "No description has been added yet."}
                 </p>
+                {project.roles.length > 0 ? (
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {project.roles.map((role) => (
+                      <span key={role} className="rounded-full border border-emerald-400/10 bg-emerald-400/10 px-3 py-1 text-xs text-emerald-200">
+                        {role}
+                      </span>
+                    ))}
+                  </div>
+                ) : null}
                 <div className="flex gap-2 pt-1">
                   <button
                     type="button"

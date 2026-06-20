@@ -9,6 +9,7 @@ interface AddProjectInput {
 	name: string;
 	description?: string;
 	imageUrl?: string;
+	roles?: string[];
 	frameworkId: string;
 }
 
@@ -23,6 +24,7 @@ function toProjectRecord(project: {
 	name: string;
 	description: string | null;
 	imageUrl: string | null;
+	roles: string[];
 	frameworkId: string;
 	framework: ProjectFrameworkOption;
 	createdAt: Date;
@@ -33,6 +35,7 @@ function toProjectRecord(project: {
 		name: project.name,
 		description: project.description,
 		imageUrl: project.imageUrl,
+		roles: project.roles || [],
 		frameworkId: project.frameworkId,
 		framework: project.framework,
 		createdAt: project.createdAt.toISOString(),
@@ -78,6 +81,7 @@ export async function addProject(input: AddProjectInput): Promise<AddProjectResu
 				name: input.name.trim(),
 				description: input.description?.trim() || null,
 				imageUrl: input.imageUrl?.trim() || null,
+				roles: input.roles || [],
 				frameworkId: input.frameworkId,
 				createdBy: userId,
 			},
@@ -86,6 +90,7 @@ export async function addProject(input: AddProjectInput): Promise<AddProjectResu
 				name: true,
 				description: true,
 				imageUrl: true,
+				roles: true,
 				frameworkId: true,
 				framework: {
 					select: {

@@ -16,6 +16,7 @@ function toProjectRecord(project: {
 	name: string;
 	description: string | null;
 	imageUrl: string | null;
+	roles: string[];
 	frameworkId: string;
 	framework: {
 		id: string;
@@ -30,6 +31,7 @@ function toProjectRecord(project: {
 		name: project.name,
 		description: project.description,
 		imageUrl: project.imageUrl,
+		roles: project.roles || [],
 		frameworkId: project.frameworkId,
 		framework: project.framework,
 		createdAt: project.createdAt.toISOString(),
@@ -72,6 +74,7 @@ export async function getProjects(): Promise<GetProjectsResult> {
 				name: true,
 				description: true,
 				imageUrl: true,
+				roles: true,
 				frameworkId: true,
 				framework: {
 					select: {
