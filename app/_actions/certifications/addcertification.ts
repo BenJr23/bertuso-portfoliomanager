@@ -4,17 +4,19 @@ import { cookies } from "next/headers";
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 
-interface AddCertificationInput {
+export interface AddCertificationInput {
 	name: string;
+	dateIssued: string;
 	description?: string | null;
 	image?: string | null;
 }
 
-interface AddCertificationResult {
+export interface AddCertificationResult {
 	success: boolean;
 	data?: {
 		id: string;
 		name: string;
+		dateIssued: string;
 		description: string | null;
 		image: string | null;
 	};
@@ -28,20 +30,30 @@ export async function addCertification(input: AddCertificationInput): Promise<Ad
 		}
 
 		const cookieStore = await cookies();
-		const session = await auth.api.getSession({ headers: { cookie: cookieStore.toString() } });
+		const session = (await auth.api.getSession({ headers: { cookie: cookieStore.toString() } })) as {
+			user?: { id?: string };
+			userId?: string;
+			id?: string;
+		} | null;
 
 		if (!session) {
 			return { success: false, error: "Not authenticated." };
 		}
 
-		const userId = (session as any).user?.id ?? (session as any).userId ?? (session as any).id;
+		const userId = session?.user?.id ?? session?.userId ?? session?.id;
 		if (!userId) {
 			return { success: false, error: "Unable to determine authenticated user." };
+		}
+
+		const dateIssued = new Date(input.dateIssued);
+		if (Number.isNaN(dateIssued.getTime())) {
+			return { success: false, error: "Valid date issued is required." };
 		}
 
 		const created = await prisma.certification.create({
 			data: {
 				name: input.name.trim(),
+				dateIssued,
 				description: input.description?.trim() || null,
 				image: input.image?.trim() || null,
 				createdBy: userId,
@@ -49,6 +61,7 @@ export async function addCertification(input: AddCertificationInput): Promise<Ad
 			select: {
 				id: true,
 				name: true,
+				dateIssued: true,
 				description: true,
 				image: true,
 			},

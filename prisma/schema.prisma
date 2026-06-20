@@ -94,6 +94,7 @@ enum ToolCategory {
   VERSION_CONTROL
   LANGUAGE
   UI_TOOLKIT
+  API
   MOBILE
   CLOUD
   MONITORING
@@ -161,6 +162,7 @@ model Certification {
   name        String
   description String?
   image       String?
+  dateIssued  DateTime @default(now())
   createdBy   String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt

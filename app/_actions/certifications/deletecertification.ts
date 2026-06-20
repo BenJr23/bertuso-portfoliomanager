@@ -4,7 +4,7 @@ import { cookies } from "next/headers";
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 
-interface DeleteCertificationResult {
+export interface DeleteCertificationResult {
 	success: boolean;
 	error?: string;
 }

@@ -1,13 +1,26 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import DeleteCertification from "./DeleteCertification";
 
 interface CertificationItem {
   id: string;
   name: string;
+  dateIssued: string;
   description: string | null;
   image: string | null;
+}
+
+interface EditCertificationResult {
+  success: boolean;
+  data?: CertificationItem;
+  error?: string;
+}
+
+interface UploadCertificationImageResult {
+  success: boolean;
+  url?: string;
+  error?: string;
 }
 
 interface Props {
@@ -16,9 +29,9 @@ interface Props {
   onEdit: (certification: CertificationItem) => void;
   onDelete: (id: string) => void;
   certification?: CertificationItem;
-  editCertificationAction: (input: { id: string; name: string; description?: string | null; image?: string | null }) => Promise<any>;
-  deleteCertificationAction: (id: string) => Promise<any>;
-  uploadCertificationImageAction: (file: File) => Promise<any>;
+  editCertificationAction: (input: { id: string; name: string; dateIssued: string; description?: string | null; image?: string | null }) => Promise<EditCertificationResult>;
+  deleteCertificationAction: (id: string) => Promise<{ success: boolean; error?: string }>;
+  uploadCertificationImageAction: (file: File) => Promise<UploadCertificationImageResult>;
 }
 
 export default function EditCertification({
@@ -31,9 +44,10 @@ export default function EditCertification({
   deleteCertificationAction,
   uploadCertificationImageAction,
 }: Props) {
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [image, setImage] = useState("");
+  const [name, setName] = useState(certification?.name ?? "");
+  const [dateIssued, setDateIssued] = useState<string>((certification?.dateIssued ?? new Date().toISOString()).slice(0, 10));
+  const [description, setDescription] = useState(certification?.description ?? "");
+  const [image, setImage] = useState(certification?.image ?? "");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
@@ -41,18 +55,6 @@ export default function EditCertification({
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
-
-  useEffect(() => {
-    if (!open || !certification) return;
-    setName(certification.name);
-    setDescription(certification.description || "");
-    setImage(certification.image || "");
-    setError(null);
-    setUploadError(null);
-    setSelectedFile(null);
-    setPreviewUrl(null);
-    setShowDeleteConfirm(false);
-  }, [open, certification]);
 
   if (!open || !certification) return null;
 
@@ -109,6 +111,7 @@ export default function EditCertification({
       const result = await editCertificationAction({
         id: currentCertification.id,
         name,
+        dateIssued,
         description: description || null,
         image: image || null,
       });
@@ -142,6 +145,11 @@ export default function EditCertification({
           <div>
             <label className="mb-2 block text-sm font-medium text-slate-200">Description</label>
             <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={4} placeholder="What this certification validates..." className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder-slate-500 focus:border-emerald-400/50 focus:outline-none" />
+          </div>
+
+          <div>
+            <label className="mb-2 block text-sm font-medium text-slate-200">Date Issued</label>
+            <input type="date" value={dateIssued} onChange={(e) => setDateIssued(e.target.value)} className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder-slate-500 focus:border-emerald-400/50 focus:outline-none" required />
           </div>
 
           <div>

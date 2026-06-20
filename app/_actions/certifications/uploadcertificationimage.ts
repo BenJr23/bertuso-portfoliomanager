@@ -2,7 +2,7 @@
 
 import { uploadAuthenticatedImage } from "@/lib/supabase-storage";
 
-interface UploadCertificationImageResult {
+export interface UploadCertificationImageResult {
   success: boolean;
   url?: string;
   error?: string;

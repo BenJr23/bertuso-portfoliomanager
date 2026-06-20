@@ -4,13 +4,17 @@ import { useMemo, useState } from "react";
 import AddCertification from "../components/modals/AddCertification";
 import EditCertification from "../components/modals/EditCertification";
 import type { CertificationItem } from "@/app/_actions/certifications/getcertifications";
+import type { AddCertificationInput, AddCertificationResult } from "@/app/_actions/certifications/addcertification";
+import type { EditCertificationInput, EditCertificationResult } from "@/app/_actions/certifications/editcertification";
+import type { DeleteCertificationResult } from "@/app/_actions/certifications/deletecertification";
+import type { UploadCertificationImageResult } from "@/app/_actions/certifications/uploadcertificationimage";
 
 interface Props {
   initialCertifications: CertificationItem[];
-  addCertificationAction: (input: { name: string; description?: string | null; image?: string | null }) => Promise<any>;
-  editCertificationAction: (input: { id: string; name: string; description?: string | null; image?: string | null }) => Promise<any>;
-  deleteCertificationAction: (id: string) => Promise<any>;
-  uploadCertificationImageAction: (file: File) => Promise<any>;
+  addCertificationAction: (input: AddCertificationInput) => Promise<AddCertificationResult>;
+  editCertificationAction: (input: EditCertificationInput) => Promise<EditCertificationResult>;
+  deleteCertificationAction: (id: string) => Promise<DeleteCertificationResult>;
+  uploadCertificationImageAction: (file: File) => Promise<UploadCertificationImageResult>;
 }
 
 export default function CertificationsClient({
@@ -30,7 +34,7 @@ export default function CertificationsClient({
     const q = query.trim().toLowerCase();
     if (!q) return certifications;
     return certifications.filter((cert) => {
-      return [cert.name, cert.description || ""].some((value) => value.toLowerCase().includes(q));
+      return [cert.name, cert.description || "", cert.dateIssued].some((value) => value.toLowerCase().includes(q));
     });
   }, [certifications, query]);
 
@@ -99,6 +103,7 @@ export default function CertificationsClient({
                   <h3 className="text-base font-semibold text-white">{cert.name}</h3>
                 </div>
                 <p className="text-sm text-slate-400">{cert.description || "No description yet."}</p>
+                <p className="text-xs uppercase tracking-[0.24em] text-slate-500">Issued {new Date(cert.dateIssued).toLocaleDateString()}</p>
                 <div className="flex gap-2">
                   <button
                     type="button"
@@ -126,6 +131,7 @@ export default function CertificationsClient({
       />
 
       <EditCertification
+        key={`${selected?.id ?? "null"}-${isEditOpen}`}
         open={isEditOpen}
         onClose={() => {
           setIsEditOpen(false);

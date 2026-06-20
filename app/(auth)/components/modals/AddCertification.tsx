@@ -5,22 +5,36 @@ import { useState } from "react";
 interface CertificationItem {
   id: string;
   name: string;
+  dateIssued: string;
   description: string | null;
   image: string | null;
+}
+
+interface AddCertificationResult {
+  success: boolean;
+  data?: CertificationItem;
+  error?: string;
+}
+
+interface UploadCertificationImageResult {
+  success: boolean;
+  url?: string;
+  error?: string;
 }
 
 interface Props {
   open: boolean;
   onClose: () => void;
   onAdd: (certification: CertificationItem) => void;
-  addCertificationAction: (input: { name: string; description?: string | null; image?: string | null }) => Promise<any>;
-  uploadCertificationImageAction: (file: File) => Promise<any>;
+  addCertificationAction: (input: { name: string; dateIssued: string; description?: string | null; image?: string | null }) => Promise<AddCertificationResult>;
+  uploadCertificationImageAction: (file: File) => Promise<UploadCertificationImageResult>;
 }
 
 export default function AddCertification({ open, onClose, onAdd, addCertificationAction, uploadCertificationImageAction }: Props) {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [image, setImage] = useState<string>("");
+  const [dateIssued, setDateIssued] = useState<string>(new Date().toISOString().slice(0, 10));
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [uploadError, setUploadError] = useState<string | null>(null);
@@ -32,6 +46,7 @@ export default function AddCertification({ open, onClose, onAdd, addCertificatio
   function reset() {
     setName("");
     setDescription("");
+    setDateIssued(new Date().toISOString().slice(0, 10));
     setImage("");
     setError(null);
     setUploadError(null);
@@ -79,6 +94,7 @@ export default function AddCertification({ open, onClose, onAdd, addCertificatio
     try {
       const result = await addCertificationAction({
         name,
+        dateIssued,
         description: description || null,
         image: image || null,
       });
@@ -108,6 +124,9 @@ export default function AddCertification({ open, onClose, onAdd, addCertificatio
 
         <label className="block text-sm text-slate-300">Description</label>
         <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={4} className="mt-1 mb-3 w-full rounded-md border border-white/10 bg-transparent px-3 py-2 text-white placeholder:text-slate-400" placeholder="A short summary of the certification" />
+
+        <label className="block text-sm text-slate-300">Date Issued</label>
+        <input type="date" value={dateIssued} onChange={(e) => setDateIssued(e.target.value)} className="mt-1 mb-3 w-full rounded-md border border-white/10 bg-transparent px-3 py-2 text-white placeholder:text-slate-400" required />
 
         <div className="mb-4">
           <label className="mb-2 block text-sm text-slate-300">Image</label>

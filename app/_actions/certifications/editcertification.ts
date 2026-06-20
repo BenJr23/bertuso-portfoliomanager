@@ -4,18 +4,20 @@ import { cookies } from "next/headers";
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 
-interface EditCertificationInput {
+export interface EditCertificationInput {
 	id: string;
 	name: string;
+	dateIssued: string;
 	description?: string | null;
 	image?: string | null;
 }
 
-interface EditCertificationResult {
+export interface EditCertificationResult {
 	success: boolean;
 	data?: {
 		id: string;
 		name: string;
+		dateIssued: string;
 		description: string | null;
 		image: string | null;
 	};
@@ -44,16 +46,23 @@ export async function editCertification(input: EditCertificationInput): Promise<
 			return { success: false, error: "Unauthorized." };
 		}
 
+		const dateIssued = new Date(input.dateIssued);
+		if (Number.isNaN(dateIssued.getTime())) {
+			return { success: false, error: "Valid date issued is required." };
+		}
+
 		const updated = await prisma.certification.update({
 			where: { id: input.id },
 			data: {
 				name: input.name.trim(),
+				dateIssued,
 				description: input.description?.trim() || null,
 				image: input.image?.trim() || null,
 			},
 			select: {
 				id: true,
 				name: true,
+				dateIssued: true,
 				description: true,
 				image: true,
 			},

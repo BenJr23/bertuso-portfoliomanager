@@ -6,7 +6,7 @@ interface Props {
   open: boolean;
   onClose: () => void;
   onDelete: () => void;
-  deleteCertificationAction: (id: string) => Promise<any>;
+  deleteCertificationAction: (id: string) => Promise<unknown>;
   certificationId: string;
   certificationName: string;
 }
