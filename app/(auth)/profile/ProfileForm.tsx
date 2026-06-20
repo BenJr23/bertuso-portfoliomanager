@@ -96,7 +96,20 @@ export default function ProfileForm({ initialData, editProfileAction, uploadImag
 
         <form onSubmit={handleSubmit} className="space-y-8 p-6 sm:p-8">
           <div className="flex flex-col gap-6 rounded-3xl border border-white/10 bg-white/5 p-5 sm:flex-row sm:items-center">
-            <img src={formData.image || undefined} alt={formData.name} className="h-24 w-24 rounded-2xl object-cover ring-2 ring-white/10" />
+            {formData.image ? (
+              <img src={formData.image} alt={formData.name} className="h-24 w-24 rounded-2xl object-cover ring-2 ring-white/10" />
+            ) : (
+              <div className="flex h-24 w-24 items-center justify-center rounded-2xl bg-emerald-500/15 text-3xl font-semibold text-emerald-200 ring-2 ring-white/10">
+                {formData.name
+                  ? formData.name
+                      .split(" ")
+                      .filter(Boolean)
+                      .slice(0, 2)
+                      .map((part) => part[0].toUpperCase())
+                      .join("")
+                  : "UD"}
+              </div>
+            )}
             <div>
               <h4 className="text-base font-semibold text-white">Profile Photo</h4>
               <p className="mt-1 text-sm text-slate-400">Upload a new photo or update your existing one.</p>

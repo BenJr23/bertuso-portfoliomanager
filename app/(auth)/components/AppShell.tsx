@@ -99,11 +99,24 @@ export default function AppShell({ children }: { children: ReactNode }) {
           {session?.user ? (
             <div className="mt-auto rounded-[1.5rem] border border-white/10 bg-white/5 p-4">
               <div className="flex items-center gap-3">
-                <img
-                  src={session.user.image ?? "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop"}
-                  alt={session.user.name ?? "User"}
-                  className="h-12 w-12 rounded-2xl object-cover ring-2 ring-white/10"
-                />
+                {session.user.image ? (
+                  <img
+                    src={session.user.image}
+                    alt={session.user.name ?? "User"}
+                    className="h-12 w-12 rounded-2xl object-cover ring-2 ring-white/10"
+                  />
+                ) : (
+                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-500/15 text-sm font-semibold text-emerald-200 ring-2 ring-white/10">
+                    {session.user.name
+                      ? session.user.name
+                          .split(" ")
+                          .filter(Boolean)
+                          .slice(0, 2)
+                          .map((part) => part[0].toUpperCase())
+                          .join("")
+                      : "UD"}
+                  </div>
+                )}
                 <div className="min-w-0">
                   <p className="truncate text-sm font-semibold text-white">{session.user.name ?? "Developer"}</p>
                   <p className="truncate text-xs text-slate-400">{session.user.email}</p>
@@ -125,17 +138,11 @@ export default function AppShell({ children }: { children: ReactNode }) {
 
         <div className="flex min-w-0 flex-1 flex-col">
           <header className="sticky top-0 z-30 border-b border-white/10 bg-slate-950/70 px-4 py-4 backdrop-blur-2xl sm:px-6 lg:px-8">
-            <div className="flex items-center justify-between gap-4 rounded-[1.75rem] border border-white/10 bg-white/5 px-4 py-4 sm:px-6">
+            <div className="rounded-[1.75rem] border border-white/10 bg-white/5 px-4 py-4 sm:px-6">
               <div className="min-w-0">
                 <p className="text-[10px] uppercase tracking-[0.32em] text-slate-400">{meta.eyebrow}</p>
                 <h1 className="truncate text-xl font-semibold text-white sm:text-2xl">{meta.title}</h1>
                 <p className="truncate text-sm text-slate-400">{meta.subtitle}</p>
-              </div>
-              <div className="flex items-center gap-3">
-                <div className="hidden rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-2 text-sm text-slate-300 md:block">
-                  Search
-                </div>
-                <div className="h-10 w-10 rounded-2xl border border-white/10 bg-emerald-400/10" />
               </div>
             </div>
           </header>
