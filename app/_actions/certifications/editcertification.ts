@@ -68,7 +68,13 @@ export async function editCertification(input: EditCertificationInput): Promise<
 			},
 		});
 
-		return { success: true, data: updated };
+		return {
+			success: true,
+			data: {
+				...updated,
+				dateIssued: updated.dateIssued.toISOString(),
+			},
+		};
 	} catch (error: unknown) {
 		const code = typeof error === "object" && error !== null ? (error as { code?: string }).code : undefined;
 		if (code === "P2002") {

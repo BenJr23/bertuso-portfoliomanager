@@ -1,12 +1,13 @@
 "use client";
 
 import { useState } from "react";
+import type { DeleteCertificationResult } from "@/app/_actions/certifications/deletecertification";
 
 interface Props {
   open: boolean;
   onClose: () => void;
   onDelete: () => void;
-  deleteCertificationAction: (id: string) => Promise<unknown>;
+  deleteCertificationAction: (id: string) => Promise<DeleteCertificationResult>;
   certificationId: string;
   certificationName: string;
 }
