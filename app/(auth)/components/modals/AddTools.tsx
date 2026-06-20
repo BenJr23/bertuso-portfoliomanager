@@ -208,21 +208,27 @@ export default function AddTools({ open, onClose, onAdd }: AddToolsProps) {
 					</>
 				)}
 			</div>
-				<label className="block text-sm text-slate-300">Category</label>
+
+			<div className="relative">
+				<label className="block text-sm font-medium text-slate-200 mb-2">Category</label>
 				<select
 					value={category}
 					onChange={(e) => setCategory(e.target.value)}
-					className="mt-1 mb-4 w-full rounded-md border border-white/10 bg-transparent px-3 py-2 text-white"
+					size={5}
+					className="w-full rounded-2xl border border-white/10 bg-slate-950/80 px-4 py-3 text-white focus:border-emerald-400/50 focus:outline-none"
+					required
 				>
+					<option value="">Select a category</option>
 					{categoryOptions.map((c) => (
-						<option key={c} value={c} className="text-black">
+						<option key={c} value={c} className="bg-slate-950 text-white">
 							{c}
 						</option>
 					))}
 				</select>
+			</div>
 
-				{error ? <p className="mb-2 text-sm text-red-400">{error}</p> : null}
-				<div className="flex justify-end gap-2">
+			{error ? <p className="mb-2 text-sm text-red-400">{error}</p> : null}
+			<div className="flex justify-end gap-2">
 					<button
 						type="button"
 						onClick={() => {

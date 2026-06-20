@@ -136,11 +136,12 @@ export default function EditTools({ open, onClose, onEdit, onDelete, tool }: Edi
             />
           </div>
 
-          <div>
+          <div className="relative">
             <label className="block text-sm font-medium text-slate-200 mb-2">Category</label>
             <select
               value={category}
               onChange={(e) => setCategory(e.target.value)}
+              size={5}
               className="w-full rounded-2xl border border-white/10 bg-slate-950/80 px-4 py-3 text-white focus:border-emerald-400/50 focus:outline-none"
               required
             >

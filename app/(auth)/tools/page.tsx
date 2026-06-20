@@ -80,32 +80,25 @@ export default function ToolsPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between gap-4">
-        <div className="flex flex-wrap gap-2 rounded-[1.75rem] border border-white/10 bg-slate-950/70 p-3 backdrop-blur-2xl">
+        <select
+          value={selectedCategory}
+          onChange={(e) => setSelectedCategory(e.target.value)}
+          className="rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-2 text-sm font-medium text-slate-300 backdrop-blur-2xl focus:border-emerald-400/30 focus:outline-none"
+        >
           {categories.map((category) => (
-            <button
-              key={category}
-              type="button"
-              onClick={() => setSelectedCategory(category)}
-              className={`rounded-2xl px-4 py-2 text-sm font-medium transition-colors ${
-                selectedCategory === category
-                  ? "border border-emerald-400/20 bg-emerald-400/10 text-emerald-200"
-                  : "text-slate-300 hover:bg-white/5 hover:text-white"
-              }`}
-            >
+            <option key={category} value={category} className="bg-slate-950 text-white">
               {category}
-            </button>
+            </option>
           ))}
-        </div>
+        </select>
 
-        <div>
-          <button
-            type="button"
-            onClick={() => setIsAddOpen(true)}
-            className="rounded-2xl px-4 py-2 text-sm font-semibold bg-emerald-500/20 text-emerald-200 hover:bg-emerald-500/30"
-          >
-            + Add Tool
-          </button>
-        </div>
+        <button
+          type="button"
+          onClick={() => setIsAddOpen(true)}
+          className="rounded-2xl px-4 py-2 text-sm font-semibold bg-emerald-500/20 text-emerald-200 hover:bg-emerald-500/30"
+        >
+          + Add Tool
+        </button>
       </div>
 
       {error && (
