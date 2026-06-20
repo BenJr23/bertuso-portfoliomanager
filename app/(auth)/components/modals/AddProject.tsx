@@ -120,11 +120,11 @@ export default function AddProject({ open, onClose, onAdd, frameworks }: AddProj
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
+    <div className="fixed inset-0 z-50 flex items-start justify-center px-4 py-4 sm:items-center">
       <div className="absolute inset-0 bg-black/65 backdrop-blur-sm" onClick={resetForm} />
       <form
         onSubmit={handleSubmit}
-        className="relative z-10 w-full max-w-2xl overflow-hidden rounded-[2rem] border border-white/10 bg-slate-950/95 shadow-2xl shadow-black/40 backdrop-blur-2xl"
+        className="relative z-10 max-h-[calc(100vh-2rem)] w-full max-w-2xl overflow-y-auto rounded-[2rem] border border-white/10 bg-slate-950/95 shadow-2xl shadow-black/40 backdrop-blur-2xl"
       >
         <div className="border-b border-white/10 px-6 py-5 sm:px-8">
           <p className="text-[10px] uppercase tracking-[0.32em] text-slate-500">Project Forge</p>

@@ -130,7 +130,7 @@ export default function EditCertification({
   return (
     <>
       <div className="fixed inset-0 z-40 bg-black/50" onClick={reset} />
-      <div className="fixed left-1/2 top-1/2 z-50 w-full max-w-md -translate-x-1/2 -translate-y-1/2 rounded-3xl border border-white/10 bg-slate-950 p-8 backdrop-blur-2xl">
+      <div className="fixed left-1/2 top-1/2 z-50 max-h-[calc(100vh-2rem)] w-full max-w-md -translate-x-1/2 -translate-y-1/2 overflow-y-auto rounded-3xl border border-white/10 bg-slate-950 p-8 backdrop-blur-2xl">
         <h2 className="mb-6 text-2xl font-bold text-white">Edit Certification</h2>
 
         <form onSubmit={handleSubmit} className="space-y-6">

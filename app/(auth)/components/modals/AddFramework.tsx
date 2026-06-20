@@ -128,11 +128,11 @@ export default function AddFramework({ open, onClose, onAdd }: AddFrameworkProps
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
+    <div className="fixed inset-0 z-50 flex items-start justify-center px-4 py-4 sm:items-center">
       <div className="absolute inset-0 bg-black/50" onClick={resetForm} />
       <form
         onSubmit={handleSubmit}
-        className="relative z-10 w-full max-w-md rounded-2xl border border-white/10 bg-slate-950/80 p-6 backdrop-blur-2xl"
+        className="relative z-10 max-h-[calc(100vh-2rem)] w-full max-w-md overflow-y-auto rounded-2xl border border-white/10 bg-slate-950/80 p-6 backdrop-blur-2xl"
       >
         <h3 className="mb-4 text-lg font-semibold text-white">Add Framework</h3>
 

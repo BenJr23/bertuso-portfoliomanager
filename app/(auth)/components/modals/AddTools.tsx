@@ -104,7 +104,7 @@ export default function AddTools({ open, onClose, onAdd }: AddToolsProps) {
 	}
 
 	return (
-		<div className="fixed inset-0 z-50 flex items-center justify-center">
+		<div className="fixed inset-0 z-50 flex items-start justify-center px-4 py-4 sm:items-center">
 			<div
 				className="absolute inset-0 bg-black/50"
 				onClick={() => {
@@ -113,7 +113,7 @@ export default function AddTools({ open, onClose, onAdd }: AddToolsProps) {
 					onClose();
 				}}
 			/>
-			<form onSubmit={handleSubmit} className="relative z-10 w-full max-w-md rounded-2xl border border-white/10 bg-slate-950/80 p-6 backdrop-blur-2xl">
+			<form onSubmit={handleSubmit} className="relative z-10 max-h-[calc(100vh-2rem)] w-full max-w-md overflow-y-auto rounded-2xl border border-white/10 bg-slate-950/80 p-6 backdrop-blur-2xl">
 				<h3 className="mb-4 text-lg font-semibold text-white">Add Tool</h3>
 
 				<label className="block text-sm text-slate-300">Name</label>

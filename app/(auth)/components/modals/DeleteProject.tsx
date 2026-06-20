@@ -42,9 +42,9 @@ export default function DeleteProject({ open, onClose, onDelete, project }: Dele
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
+    <div className="fixed inset-0 z-50 flex items-start justify-center px-4 py-4 sm:items-center">
       <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={onClose} />
-      <div className="relative z-10 w-full max-w-md rounded-[2rem] border border-white/10 bg-slate-950/95 p-6 shadow-2xl shadow-black/40 sm:p-8">
+      <div className="relative z-10 max-h-[calc(100vh-2rem)] w-full max-w-md overflow-y-auto rounded-[2rem] border border-white/10 bg-slate-950/95 p-6 shadow-2xl shadow-black/40 sm:p-8">
         <p className="text-[10px] uppercase tracking-[0.32em] text-slate-500">Danger Zone</p>
         <h3 className="mt-2 text-2xl font-semibold text-white">Delete this project?</h3>
         <p className="mt-4 text-sm leading-6 text-slate-300">
