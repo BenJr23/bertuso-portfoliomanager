@@ -111,6 +111,14 @@ enum AboutMeCategory {
   WORK_PHILOSOPHY
   CAREER_HIGHLIGHTS
   CONTINUOUS_LEARNING
+  WORK_EXPERIENCE
+  EDUCATIONAL_BACKGROUND
+}
+
+enum ProjectType {
+  MOBILE_APPLICATION
+  DESKTOP_APPLICATION
+  WEB_APPLICATION
 }
 
 model Tool {
@@ -142,17 +150,18 @@ model Framework {
 }
 
 model Project {
-  id          String   @id @default(cuid())
+  id          String       @id @default(cuid())
   name        String
   description String?
   imageUrl    String?
-  roles       String[] @default([])
+  type        ProjectType  @default(WEB_APPLICATION)
+  roles       String[]     @default([])
   createdBy   String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
   frameworkId String
-  framework   Framework @relation(fields: [frameworkId], references: [id], onDelete: Cascade)
-  creator     User      @relation(fields: [createdBy], references: [id], onDelete: Cascade)
+  framework   Framework    @relation(fields: [frameworkId], references: [id], onDelete: Cascade)
+  creator     User         @relation(fields: [createdBy], references: [id], onDelete: Cascade)
 
   @@map("project")
 }
