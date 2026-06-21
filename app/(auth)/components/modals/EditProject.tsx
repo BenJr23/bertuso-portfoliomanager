@@ -209,9 +209,9 @@ export default function EditProject({ open, onClose, onEdit, onDelete, project, 
               onChange={(event) => setType(event.target.value)}
               className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none transition focus:border-emerald-400/30"
             >
-              <option value="WEB_APPLICATION">Web Application</option>
-              <option value="MOBILE_APPLICATION">Mobile Application</option>
-              <option value="DESKTOP_APPLICATION">Desktop Application</option>
+              <option value="WEB_APPLICATION" className="bg-slate-900 text-white">Web Application</option>
+              <option value="MOBILE_APPLICATION" className="bg-slate-900 text-white">Mobile Application</option>
+              <option value="DESKTOP_APPLICATION" className="bg-slate-900 text-white">Desktop Application</option>
             </select>
           </div>
 
