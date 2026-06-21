@@ -15,6 +15,8 @@ interface GetProfileResult {
 		address?: string | null;
 		phoneNumber?: string | null;
 		linkedinLink?: string | null;
+		githubLink?: string | null;
+		photos: string[];
 	};
 	error?: string;
 }
@@ -40,6 +42,7 @@ export async function getProfile(): Promise<GetProfileResult> {
 				phoneNumber: true,
 				linkedinLink: true,
 				githubLink: true,
+				photos: true,
 			},
 		});
 

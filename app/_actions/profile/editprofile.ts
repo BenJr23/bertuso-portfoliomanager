@@ -12,6 +12,7 @@ interface EditProfileInput {
 	phoneNumber?: string | null;
 	linkedinLink?: string | null;
 	githubLink?: string | null;
+	photos?: string[];
 }
 
 interface EditProfileResult {
@@ -26,6 +27,7 @@ interface EditProfileResult {
 		phoneNumber?: string | null;
 		linkedinLink?: string | null;
 		githubLink?: string | null;
+		photos: string[];
 	};
 	error?: string;
 }
@@ -61,6 +63,7 @@ export async function editProfile(input: EditProfileInput): Promise<EditProfileR
 				phoneNumber: true,
 				linkedinLink: true,
 				githubLink: true,
+				photos: true,
 			},
 		});
 

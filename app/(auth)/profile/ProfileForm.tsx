@@ -12,6 +12,7 @@ interface ProfileData {
   phoneNumber?: string | null;
   linkedinLink?: string | null;
   githubLink?: string | null;
+  photos?: string[];
 }
 
 interface Props {
@@ -21,9 +22,11 @@ interface Props {
 }
 
 export default function ProfileForm({ initialData, editProfileAction, uploadImageAction }: Props) {
-  const [formData, setFormData] = useState<ProfileData>(initialData);
+  const [formData, setFormData] = useState<ProfileData>({ ...initialData, photos: initialData.photos ?? [] });
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [selectedGalleryFile, setSelectedGalleryFile] = useState<File | null>(null);
+  const [galleryPreviewUrl, setGalleryPreviewUrl] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
@@ -62,6 +65,40 @@ export default function ProfileForm({ initialData, editProfileAction, uploadImag
     }
   }
 
+  function handleGalleryFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setSelectedGalleryFile(file);
+    const reader = new FileReader();
+    reader.onload = (ev) => setGalleryPreviewUrl(ev.target?.result as string);
+    reader.readAsDataURL(file);
+  }
+
+  async function handleGalleryUpload() {
+    if (!selectedGalleryFile) return;
+    setIsUploading(true);
+    setMessage(null);
+    try {
+      const res = await uploadImageAction(selectedGalleryFile);
+      if (!res || !res.success) {
+        setMessage(res?.error || "Upload failed.");
+        return;
+      }
+      setFormData((f) => ({ ...f, photos: [...(f.photos ?? []), res.url || ""] }));
+      setSelectedGalleryFile(null);
+      setGalleryPreviewUrl(null);
+      setMessage("Photo added to gallery.");
+    } catch (err: unknown) {
+      setMessage(err instanceof Error ? err.message : "Upload error");
+    } finally {
+      setIsUploading(false);
+    }
+  }
+
+  function removeGalleryPhoto(url: string) {
+    setFormData((f) => ({ ...f, photos: (f.photos ?? []).filter((photo) => photo !== url) }));
+  }
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setSaving(true);
@@ -75,6 +112,7 @@ export default function ProfileForm({ initialData, editProfileAction, uploadImag
         phoneNumber: formData.phoneNumber ?? null,
         linkedinLink: formData.linkedinLink ?? null,
         githubLink: formData.githubLink ?? null,
+        photos: formData.photos,
       });
       if (!res || !res.success) {
         setMessage(res?.error || "Save failed.");
@@ -128,6 +166,42 @@ export default function ProfileForm({ initialData, editProfileAction, uploadImag
                 )}
               </div>
             </div>
+          </div>
+
+          <div className="rounded-3xl border border-white/10 bg-white/5 p-5">
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <h4 className="text-base font-semibold text-white">Gallery Photos</h4>
+                <p className="mt-1 text-sm text-slate-400">Add additional profile photos for your portfolio gallery.</p>
+              </div>
+              <div className="flex items-center gap-3">
+                <input id="gallery-photo-input" type="file" accept="image/*" onChange={handleGalleryFileChange} className="hidden" />
+                <button type="button" onClick={() => document.getElementById("gallery-photo-input")?.click()} className="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-sm text-slate-200">Select Photo</button>
+                {galleryPreviewUrl && (
+                  <button type="button" onClick={handleGalleryUpload} disabled={isUploading} className="rounded-2xl bg-emerald-500/20 px-4 py-2 text-sm text-emerald-200">{isUploading ? "Uploading..." : "Add Photo"}</button>
+                )}
+              </div>
+            </div>
+
+            {galleryPreviewUrl ? (
+              <div className="mt-4 flex items-center gap-4">
+                <img src={galleryPreviewUrl} alt="Gallery preview" className="h-20 w-20 rounded-2xl object-cover" />
+                <p className="text-sm text-slate-300">Ready to add to your gallery.</p>
+              </div>
+            ) : null}
+
+            {formData.photos && formData.photos.length > 0 ? (
+              <div className="mt-5 grid gap-3 sm:grid-cols-3">
+                {formData.photos.map((photo) => (
+                  <div key={photo} className="group relative overflow-hidden rounded-3xl border border-white/10 bg-slate-900/80">
+                    <img src={photo} alt="Gallery" className="h-32 w-full object-cover" />
+                    <button type="button" onClick={() => removeGalleryPhoto(photo)} className="absolute right-2 top-2 rounded-full bg-slate-950/80 p-2 text-xs text-white transition hover:bg-red-500/90">Remove</button>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="mt-4 text-sm text-slate-500">No gallery photos added yet.</p>
+            )}
           </div>
 
           <div className="grid gap-6 md:grid-cols-2">

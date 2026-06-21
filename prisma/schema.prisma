@@ -27,6 +27,7 @@ model User {
   phoneNumber   String?
   linkedinLink  String?
   githubLink    String?
+  photos        String[]   @default([])
   createdAt     DateTime
   updatedAt     DateTime
   sessions      Session[]
