@@ -21,6 +21,7 @@ export default function EditProject({ open, onClose, onEdit, onDelete, project, 
   const [roleInput, setRoleInput] = useState("");
   const [imageUrl, setImageUrl] = useState(project?.imageUrl ?? "");
   const [frameworkId, setFrameworkId] = useState(project?.frameworkId ?? frameworks[0]?.id ?? "");
+  const [type, setType] = useState<string>(project?.type ?? "WEB_APPLICATION");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
@@ -37,6 +38,7 @@ export default function EditProject({ open, onClose, onEdit, onDelete, project, 
     setRoleInput("");
     setImageUrl(project.imageUrl ?? "");
     setFrameworkId(project.frameworkId ?? frameworks[0]?.id ?? "");
+    setType(project.type ?? "WEB_APPLICATION");
     setPreviewUrl(project.imageUrl ?? null);
     setSelectedFile(null);
     setUploadedUrl(project.imageUrl ?? null);
@@ -132,7 +134,8 @@ export default function EditProject({ open, onClose, onEdit, onDelete, project, 
         description: description.trim() || undefined,
         imageUrl: imageUrl.trim() || undefined,
         roles,
-        frameworkId,
+          frameworkId,
+          type,
       });
 
       if (!result.success || !result.data) {
@@ -193,6 +196,22 @@ export default function EditProject({ open, onClose, onEdit, onDelete, project, 
                   {framework.name}
                 </option>
               ))}
+            </select>
+          </div>
+
+          <div>
+            <label className="mb-2 block text-xs uppercase tracking-[0.24em] text-slate-400" htmlFor="edit-project-type">
+              Project Type
+            </label>
+            <select
+              id="edit-project-type"
+              value={type}
+              onChange={(event) => setType(event.target.value)}
+              className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none transition focus:border-emerald-400/30"
+            >
+              <option value="WEB_APPLICATION">Web Application</option>
+              <option value="MOBILE_APPLICATION">Mobile Application</option>
+              <option value="DESKTOP_APPLICATION">Desktop Application</option>
             </select>
           </div>
 

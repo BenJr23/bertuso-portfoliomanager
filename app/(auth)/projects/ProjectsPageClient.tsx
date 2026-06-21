@@ -168,9 +168,14 @@ export default function ProjectsPageClient({ initialProjects, initialFrameworks,
               </div>
               <div className="space-y-4 p-5">
                 <div className="flex items-center justify-between gap-3">
-                  <p className="inline-flex rounded-full border border-emerald-400/20 bg-emerald-400/10 px-3 py-1 text-xs text-emerald-200">
-                    {project.framework.name}
-                  </p>
+                  <div className="flex items-center gap-2">
+                    <p className="inline-flex rounded-full border border-emerald-400/20 bg-emerald-400/10 px-3 py-1 text-xs text-emerald-200">
+                      {project.framework.name}
+                    </p>
+                    <p className="inline-flex rounded-full border border-white/10 bg-white/5 px-2 py-1 text-[10px] text-slate-300">
+                      {project.type.replaceAll("_", " ")}
+                    </p>
+                  </div>
                   <p className="text-[10px] uppercase tracking-[0.24em] text-slate-500">
                     Updated {new Date(project.updatedAt).toLocaleDateString()}
                   </p>

@@ -14,6 +14,7 @@ interface GetProjectsResult {
 function toProjectRecord(project: {
 	id: string;
 	name: string;
+	type: string;
 	description: string | null;
 	imageUrl: string | null;
 	roles: string[];
@@ -29,6 +30,7 @@ function toProjectRecord(project: {
 	return {
 		id: project.id,
 		name: project.name,
+		type: project.type,
 		description: project.description,
 		imageUrl: project.imageUrl,
 		roles: project.roles || [],
@@ -72,6 +74,7 @@ export async function getProjects(): Promise<GetProjectsResult> {
 			select: {
 				id: true,
 				name: true,
+				type: true,
 				description: true,
 				imageUrl: true,
 				roles: true,

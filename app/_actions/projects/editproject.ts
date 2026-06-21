@@ -12,6 +12,7 @@ interface EditProjectInput {
 	imageUrl?: string;
 	roles?: string[];
 	frameworkId: string;
+	type?: string;
 }
 
 interface EditProjectResult {
@@ -23,6 +24,7 @@ interface EditProjectResult {
 function toProjectRecord(project: {
 	id: string;
 	name: string;
+  type: string;
 	description: string | null;
 	imageUrl: string | null;
 	roles: string[];
@@ -34,6 +36,7 @@ function toProjectRecord(project: {
 	return {
 		id: project.id,
 		name: project.name,
+		type: project.type,
 		description: project.description,
 		imageUrl: project.imageUrl,
 		roles: project.roles || [],
@@ -98,10 +101,12 @@ export async function editProject(input: EditProjectInput): Promise<EditProjectR
 				imageUrl: input.imageUrl?.trim() || null,
 				roles: input.roles || [],
 				frameworkId: input.frameworkId,
+				type: input.type ?? undefined,
 			},
 			select: {
 				id: true,
 				name: true,
+				type: true,
 				description: true,
 				imageUrl: true,
 				roles: true,

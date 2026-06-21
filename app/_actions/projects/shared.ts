@@ -7,6 +7,7 @@ export interface ProjectFrameworkOption {
 export interface ProjectRecord {
   id: string;
   name: string;
+  type: string;
   description: string | null;
   imageUrl: string | null;
   roles: string[];
@@ -18,6 +19,7 @@ export interface ProjectRecord {
 
 export interface ProjectFormValues {
   name: string;
+  type: string;
   description: string;
   imageUrl: string;
   roles: string[];

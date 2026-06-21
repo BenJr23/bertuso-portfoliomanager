@@ -4,6 +4,8 @@ export const aboutMeCategoryOptions = [
   { value: "WORK_PHILOSOPHY", label: "Work Philosophy" },
   { value: "CAREER_HIGHLIGHTS", label: "Career Highlights" },
   { value: "CONTINUOUS_LEARNING", label: "Continuous Learning" },
+  { value: "WORK_EXPERIENCE", label: "Work Experience" },
+  { value: "EDUCATIONAL_BACKGROUND", label: "Educational Background" },
 ] as const;
 
 export type AboutMeCategoryValue = (typeof aboutMeCategoryOptions)[number]["value"];
