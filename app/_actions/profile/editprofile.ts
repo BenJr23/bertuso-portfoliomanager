@@ -11,6 +11,7 @@ interface EditProfileInput {
 	address?: string | null;
 	phoneNumber?: string | null;
 	linkedinLink?: string | null;
+	githubLink?: string | null;
 }
 
 interface EditProfileResult {
@@ -24,6 +25,7 @@ interface EditProfileResult {
 		address?: string | null;
 		phoneNumber?: string | null;
 		linkedinLink?: string | null;
+		githubLink?: string | null;
 	};
 	error?: string;
 }
@@ -44,6 +46,7 @@ export async function editProfile(input: EditProfileInput): Promise<EditProfileR
 		if (typeof input.address !== "undefined") data.address = input.address || null;
 		if (typeof input.phoneNumber !== "undefined") data.phoneNumber = input.phoneNumber || null;
 		if (typeof input.linkedinLink !== "undefined") data.linkedinLink = input.linkedinLink || null;
+		if (typeof input.githubLink !== "undefined") data.githubLink = input.githubLink || null;
 
 		const updated = await prisma.user.update({
 			where: { id: userId },
@@ -57,6 +60,7 @@ export async function editProfile(input: EditProfileInput): Promise<EditProfileR
 				address: true,
 				phoneNumber: true,
 				linkedinLink: true,
+				githubLink: true,
 			},
 		});
 

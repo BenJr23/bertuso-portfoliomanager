@@ -193,6 +193,18 @@ export default function ProjectsPageClient({ initialProjects, initialFrameworks,
                     ))}
                   </div>
                 ) : null}
+                <div className="mt-3 flex flex-wrap gap-2 text-xs">
+                  {project.githubLink ? (
+                    <a href={project.githubLink} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-3 py-2 text-slate-200 transition hover:border-emerald-400/20 hover:text-emerald-100">
+                      GitHub
+                    </a>
+                  ) : null}
+                  {project.previewLink ? (
+                    <a href={project.previewLink} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-3 py-2 text-slate-200 transition hover:border-emerald-400/20 hover:text-emerald-100">
+                      Live Preview
+                    </a>
+                  ) : null}
+                </div>
                 <div className="flex gap-2 pt-1">
                   <button
                     type="button"

@@ -10,6 +10,8 @@ export interface ProjectRecord {
   type: string;
   description: string | null;
   imageUrl: string | null;
+  githubLink?: string | null;
+  previewLink?: string | null;
   roles: string[];
   frameworkId: string;
   framework: ProjectFrameworkOption;
@@ -22,6 +24,8 @@ export interface ProjectFormValues {
   type: string;
   description: string;
   imageUrl: string;
+  githubLink?: string;
+  previewLink?: string;
   roles: string[];
   frameworkId: string;
 }

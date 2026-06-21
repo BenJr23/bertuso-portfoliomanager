@@ -39,6 +39,7 @@ export async function getProfile(): Promise<GetProfileResult> {
 				address: true,
 				phoneNumber: true,
 				linkedinLink: true,
+				githubLink: true,
 			},
 		});
 

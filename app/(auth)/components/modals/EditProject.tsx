@@ -20,6 +20,8 @@ export default function EditProject({ open, onClose, onEdit, onDelete, project, 
   const [roles, setRoles] = useState<string[]>(project?.roles ?? []);
   const [roleInput, setRoleInput] = useState("");
   const [imageUrl, setImageUrl] = useState(project?.imageUrl ?? "");
+  const [githubLink, setGithubLink] = useState(project?.githubLink ?? "");
+  const [previewLink, setPreviewLink] = useState(project?.previewLink ?? "");
   const [frameworkId, setFrameworkId] = useState(project?.frameworkId ?? frameworks[0]?.id ?? "");
   const [type, setType] = useState<string>(project?.type ?? "WEB_APPLICATION");
   const [loading, setLoading] = useState(false);
@@ -37,6 +39,8 @@ export default function EditProject({ open, onClose, onEdit, onDelete, project, 
     setRoles(project.roles ?? []);
     setRoleInput("");
     setImageUrl(project.imageUrl ?? "");
+    setGithubLink(project.githubLink ?? "");
+    setPreviewLink(project.previewLink ?? "");
     setFrameworkId(project.frameworkId ?? frameworks[0]?.id ?? "");
     setType(project.type ?? "WEB_APPLICATION");
     setPreviewUrl(project.imageUrl ?? null);
@@ -133,9 +137,11 @@ export default function EditProject({ open, onClose, onEdit, onDelete, project, 
         name: name.trim(),
         description: description.trim() || undefined,
         imageUrl: imageUrl.trim() || undefined,
+        githubLink: githubLink.trim() || undefined,
+        previewLink: previewLink.trim() || undefined,
         roles,
-          frameworkId,
-          type,
+        frameworkId,
+        type,
       });
 
       if (!result.success || !result.data) {
@@ -225,6 +231,32 @@ export default function EditProject({ open, onClose, onEdit, onDelete, project, 
               onChange={(event) => setImageUrl(event.target.value)}
               className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-emerald-400/30"
             />
+          </div>
+          <div className="grid gap-5 sm:grid-cols-2">
+            <div>
+              <label className="mb-2 block text-xs uppercase tracking-[0.24em] text-slate-400" htmlFor="edit-project-github-link">
+                GitHub Repository
+              </label>
+              <input
+                id="edit-project-github-link"
+                value={githubLink}
+                onChange={(event) => setGithubLink(event.target.value)}
+                className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-emerald-400/30"
+                placeholder="https://github.com/username/repo"
+              />
+            </div>
+            <div>
+              <label className="mb-2 block text-xs uppercase tracking-[0.24em] text-slate-400" htmlFor="edit-project-preview-link">
+                Live Preview URL
+              </label>
+              <input
+                id="edit-project-preview-link"
+                value={previewLink}
+                onChange={(event) => setPreviewLink(event.target.value)}
+                className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-emerald-400/30"
+                placeholder="https://preview.example.com"
+              />
+            </div>
           </div>
 
           <div>

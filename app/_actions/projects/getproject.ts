@@ -17,6 +17,8 @@ function toProjectRecord(project: {
 	type: string;
 	description: string | null;
 	imageUrl: string | null;
+	githubLink?: string | null;
+	previewLink?: string | null;
 	roles: string[];
 	frameworkId: string;
 	framework: {
@@ -33,6 +35,8 @@ function toProjectRecord(project: {
 		type: project.type,
 		description: project.description,
 		imageUrl: project.imageUrl,
+		githubLink: project.githubLink ?? null,
+		previewLink: project.previewLink ?? null,
 		roles: project.roles || [],
 		frameworkId: project.frameworkId,
 		framework: project.framework,
@@ -77,6 +81,8 @@ export async function getProjects(): Promise<GetProjectsResult> {
 				type: true,
 				description: true,
 				imageUrl: true,
+				githubLink: true,
+				previewLink: true,
 				roles: true,
 				frameworkId: true,
 				framework: {

@@ -11,6 +11,7 @@ interface ProfileData {
   address?: string | null;
   phoneNumber?: string | null;
   linkedinLink?: string | null;
+  githubLink?: string | null;
 }
 
 interface Props {
@@ -73,6 +74,7 @@ export default function ProfileForm({ initialData, editProfileAction, uploadImag
         address: formData.address ?? null,
         phoneNumber: formData.phoneNumber ?? null,
         linkedinLink: formData.linkedinLink ?? null,
+        githubLink: formData.githubLink ?? null,
       });
       if (!res || !res.success) {
         setMessage(res?.error || "Save failed.");
@@ -139,6 +141,10 @@ export default function ProfileForm({ initialData, editProfileAction, uploadImag
             <div className="md:col-span-2">
               <label className="mb-2 block text-xs uppercase tracking-[0.24em] text-slate-400" htmlFor="linkedinLink">LinkedIn Profile</label>
               <input id="linkedinLink" name="linkedinLink" type="url" value={formData.linkedinLink ?? ""} onChange={handleChange} className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-emerald-400/30" />
+            </div>
+            <div className="md:col-span-2">
+              <label className="mb-2 block text-xs uppercase tracking-[0.24em] text-slate-400" htmlFor="githubLink">GitHub Profile</label>
+              <input id="githubLink" name="githubLink" type="url" value={formData.githubLink ?? ""} onChange={handleChange} className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-emerald-400/30" />
             </div>
 
             <div className="md:col-span-2">

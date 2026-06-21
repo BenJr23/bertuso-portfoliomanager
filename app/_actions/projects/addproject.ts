@@ -9,6 +9,8 @@ interface AddProjectInput {
 	name: string;
 	description?: string;
 	imageUrl?: string;
+	githubLink?: string;
+	previewLink?: string;
 	roles?: string[];
 	frameworkId: string;
 	type?: string;
@@ -26,6 +28,8 @@ function toProjectRecord(project: {
   type: string;
 	description: string | null;
 	imageUrl: string | null;
+	githubLink?: string | null;
+	previewLink?: string | null;
 	roles: string[];
 	frameworkId: string;
 	framework: ProjectFrameworkOption;
@@ -38,6 +42,8 @@ function toProjectRecord(project: {
 		type: project.type,
 		description: project.description,
 		imageUrl: project.imageUrl,
+		githubLink: project.githubLink ?? null,
+		previewLink: project.previewLink ?? null,
 		roles: project.roles || [],
 		frameworkId: project.frameworkId,
 		framework: project.framework,
@@ -84,6 +90,8 @@ export async function addProject(input: AddProjectInput): Promise<AddProjectResu
 				name: input.name.trim(),
 				description: input.description?.trim() || null,
 				imageUrl: input.imageUrl?.trim() || null,
+				githubLink: input.githubLink?.trim() || null,
+				previewLink: input.previewLink?.trim() || null,
 				roles: input.roles || [],
 				frameworkId: input.frameworkId,
 				type: input.type ?? undefined,
@@ -95,6 +103,8 @@ export async function addProject(input: AddProjectInput): Promise<AddProjectResu
 				type: true,
 				description: true,
 				imageUrl: true,
+				githubLink: true,
+				previewLink: true,
 				roles: true,
 				frameworkId: true,
 				framework: {

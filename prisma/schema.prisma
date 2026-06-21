@@ -26,6 +26,7 @@ model User {
   address       String?
   phoneNumber   String?
   linkedinLink  String?
+  githubLink    String?
   createdAt     DateTime
   updatedAt     DateTime
   sessions      Session[]
@@ -154,6 +155,8 @@ model Project {
   name        String
   description String?
   imageUrl    String?
+  githubLink  String?
+  previewLink String?
   type        ProjectType  @default(WEB_APPLICATION)
   roles       String[]     @default([])
   createdBy   String
