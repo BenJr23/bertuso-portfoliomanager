@@ -16,14 +16,22 @@ function toAboutMeRecord(aboutMe: {
 	category: AboutMeRecord["category"];
 	title: string;
 	description: string | null;
+	startDate: Date | null;
+	endDate: Date | null;
+	isPresent: boolean;
 	createdAt: Date;
 	updatedAt: Date;
+	projects: { id: string; name: string }[];
 }): AboutMeRecord {
 	return {
 		id: aboutMe.id,
 		category: aboutMe.category,
 		title: aboutMe.title,
 		description: aboutMe.description,
+		startDate: aboutMe.startDate?.toISOString() ?? null,
+		endDate: aboutMe.endDate?.toISOString() ?? null,
+		isPresent: aboutMe.isPresent,
+		projects: aboutMe.projects.map(p => ({ id: p.id, name: p.name })),
 		createdAt: aboutMe.createdAt.toISOString(),
 		updatedAt: aboutMe.updatedAt.toISOString(),
 	};
@@ -66,8 +74,14 @@ export async function getAboutMe(): Promise<GetAboutMeResult> {
 				category: true,
 				title: true,
 				description: true,
+				startDate: true,
+				endDate: true,
+				isPresent: true,
 				createdAt: true,
 				updatedAt: true,
+				projects: {
+					select: { id: true, name: true }
+				}
 			},
 			orderBy: [
 				{

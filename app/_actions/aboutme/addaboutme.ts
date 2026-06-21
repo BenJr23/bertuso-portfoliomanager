@@ -9,6 +9,10 @@ interface AddAboutMeInput {
 	category: AboutMeCategoryValue;
 	title: string;
 	description?: string;
+	startDate?: string | null;
+	endDate?: string | null;
+	isPresent?: boolean;
+	projectIds?: string[];
 }
 
 interface AddAboutMeResult {
@@ -22,14 +26,22 @@ function toAboutMeRecord(aboutMe: {
 	category: AboutMeCategoryValue;
 	title: string;
 	description: string | null;
+	startDate: Date | null;
+	endDate: Date | null;
+	isPresent: boolean;
 	createdAt: Date;
 	updatedAt: Date;
+	projects: { id: string; name: string }[];
 }): AboutMeRecord {
 	return {
 		id: aboutMe.id,
 		category: aboutMe.category,
 		title: aboutMe.title,
 		description: aboutMe.description,
+		startDate: aboutMe.startDate?.toISOString() ?? null,
+		endDate: aboutMe.endDate?.toISOString() ?? null,
+		isPresent: aboutMe.isPresent,
+		projects: aboutMe.projects.map(p => ({ id: p.id, name: p.name })),
 		createdAt: aboutMe.createdAt.toISOString(),
 		updatedAt: aboutMe.updatedAt.toISOString(),
 	};
@@ -76,15 +88,27 @@ export async function addAboutMe(input: AddAboutMeInput): Promise<AddAboutMeResu
 				category: input.category,
 				title: input.title.trim(),
 				description: input.description?.trim() || null,
+				startDate: input.startDate ? new Date(input.startDate) : null,
+				endDate: input.isPresent ? null : (input.endDate ? new Date(input.endDate) : null),
+				isPresent: input.isPresent ?? false,
 				createdBy: userId,
+				projects: input.projectIds?.length ? {
+					connect: input.projectIds.map(id => ({ id }))
+				} : undefined,
 			},
 			select: {
 				id: true,
 				category: true,
 				title: true,
 				description: true,
+				startDate: true,
+				endDate: true,
+				isPresent: true,
 				createdAt: true,
 				updatedAt: true,
+				projects: {
+					select: { id: true, name: true }
+				}
 			},
 		});
 

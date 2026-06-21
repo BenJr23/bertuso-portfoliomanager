@@ -162,6 +162,8 @@ model Project {
   frameworkId String
   framework   Framework    @relation(fields: [frameworkId], references: [id], onDelete: Cascade)
   creator     User         @relation(fields: [createdBy], references: [id], onDelete: Cascade)
+  aboutMeId   String?
+  aboutMe     AboutMe?     @relation(fields: [aboutMeId], references: [id], onDelete: SetNull)
 
   @@map("project")
 }
@@ -185,10 +187,14 @@ model AboutMe {
   category    AboutMeCategory
   title       String
   description String?
+  startDate   DateTime?
+  endDate     DateTime?
+  isPresent   Boolean  @default(false)
   createdBy   String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   creator     User     @relation(fields: [createdBy], references: [id], onDelete: Cascade)
+  projects    Project[]
 
   @@map("about_me")
 }

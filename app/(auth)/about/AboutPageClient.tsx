@@ -134,6 +134,39 @@ export default function AboutPageClient({ initialAboutMeEntries, initialError }:
               <div className="space-y-5 px-6 py-6 sm:px-8">
                 <p className="text-sm leading-7 text-slate-300">{entry.description || "No description has been added yet."}</p>
 
+                {/* Date Timeline */}
+                {(entry.startDate || entry.endDate || entry.isPresent) && (
+                  <div className="flex items-center gap-2 text-sm text-slate-400">
+                    <span className="inline-block h-2 w-2 rounded-full bg-emerald-400"></span>
+                    <span>
+                      {entry.startDate && new Date(entry.startDate).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
+                      {entry.startDate && (entry.endDate || entry.isPresent) && ' → '}
+                      {entry.isPresent ? (
+                        <span className="font-semibold text-emerald-300">Present</span>
+                      ) : entry.endDate ? (
+                        new Date(entry.endDate).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
+                      ) : null}
+                    </span>
+                  </div>
+                )}
+
+                {/* Related Projects */}
+                {entry.projects && entry.projects.length > 0 && (
+                  <div className="space-y-2">
+                    <p className="text-xs uppercase tracking-[0.24em] text-slate-500">Related Projects</p>
+                    <div className="flex flex-wrap gap-2">
+                      {entry.projects.map((project) => (
+                        <span
+                          key={project.id}
+                          className="inline-flex items-center rounded-lg bg-emerald-400/20 border border-emerald-400/30 px-2.5 py-1 text-xs font-medium text-emerald-200"
+                        >
+                          {project.name}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
                 <div className="flex flex-wrap items-center gap-3 text-xs text-slate-500">
                   <span>Created {new Date(entry.createdAt).toLocaleDateString()}</span>
                   <span>Updated {new Date(entry.updatedAt).toLocaleDateString()}</span>

@@ -10,11 +10,20 @@ export const aboutMeCategoryOptions = [
 
 export type AboutMeCategoryValue = (typeof aboutMeCategoryOptions)[number]["value"];
 
+export interface ProjectReference {
+  id: string;
+  name: string;
+}
+
 export interface AboutMeRecord {
   id: string;
   category: AboutMeCategoryValue;
   title: string;
   description: string | null;
+  startDate: string | null;
+  endDate: string | null;
+  isPresent: boolean;
+  projects: ProjectReference[];
   createdAt: string;
   updatedAt: string;
 }
