@@ -11,6 +11,7 @@ interface GetProfileResult {
 		name: string;
 		email: string;
 		image?: string | null;
+		connectionCode?: string | null;
 		description?: string | null;
 		address?: string | null;
 		phoneNumber?: string | null;
@@ -37,6 +38,7 @@ export async function getProfile(): Promise<GetProfileResult> {
 				name: true,
 				email: true,
 				image: true,
+				connectionCode: true,
 				description: true,
 				address: true,
 				phoneNumber: true,
