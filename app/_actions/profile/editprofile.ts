@@ -49,6 +49,7 @@ export async function editProfile(input: EditProfileInput): Promise<EditProfileR
 		if (typeof input.phoneNumber !== "undefined") data.phoneNumber = input.phoneNumber || null;
 		if (typeof input.linkedinLink !== "undefined") data.linkedinLink = input.linkedinLink || null;
 		if (typeof input.githubLink !== "undefined") data.githubLink = input.githubLink || null;
+		if (typeof input.photos !== "undefined") data.photos = input.photos ?? [];
 
 		const updated = await prisma.user.update({
 			where: { id: userId },
