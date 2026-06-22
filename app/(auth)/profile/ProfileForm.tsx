@@ -13,15 +13,17 @@ interface ProfileData {
   linkedinLink?: string | null;
   githubLink?: string | null;
   photos?: string[];
+  connectionCode?: string | null;
 }
 
 interface Props {
   initialData: ProfileData;
   editProfileAction: (input: any) => Promise<any>;
   uploadImageAction: (file: File) => Promise<any>;
+  generateConnectionCodeAction: () => Promise<any>;
 }
 
-export default function ProfileForm({ initialData, editProfileAction, uploadImageAction }: Props) {
+export default function ProfileForm({ initialData, editProfileAction, uploadImageAction, generateConnectionCodeAction }: Props) {
   const [formData, setFormData] = useState<ProfileData>({ ...initialData, photos: initialData.photos ?? [] });
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -30,6 +32,7 @@ export default function ProfileForm({ initialData, editProfileAction, uploadImag
   const [saving, setSaving] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
+  const [generating, setGenerating] = useState(false);
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
     setFormData({ ...formData, [e.target.name]: e.target.value } as ProfileData);
@@ -126,6 +129,24 @@ export default function ProfileForm({ initialData, editProfileAction, uploadImag
     }
   }
 
+  async function handleGenerateCode() {
+    setGenerating(true);
+    setMessage(null);
+    try {
+      const res = await generateConnectionCodeAction();
+      if (res?.success && res.data?.connectionCode) {
+        setFormData((f) => ({ ...f, connectionCode: res.data.connectionCode }));
+        setMessage("Connection code created.");
+      } else {
+        setMessage(res?.error || "Failed to generate code.");
+      }
+    } catch (err) {
+      // handled below via direct call; keep for safety
+    } finally {
+      setGenerating(false);
+    }
+  }
+
   return (
     <div className="max-w-4xl">
       <div className="rounded-[2rem] border border-white/10 bg-slate-950/70 backdrop-blur-2xl overflow-hidden">
@@ -135,6 +156,43 @@ export default function ProfileForm({ initialData, editProfileAction, uploadImag
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-8 p-6 sm:p-8">
+          <div className="rounded-3xl border border-white/10 bg-white/5 p-5">
+            <div className="flex items-center justify-between">
+              <div>
+                <h4 className="text-base font-semibold text-white">Connection Code</h4>
+                <p className="mt-1 text-sm text-slate-400">A secret code used for integrations.</p>
+              </div>
+              <div className="flex items-center gap-3">
+                {formData.connectionCode ? (
+                  <div className="flex items-center gap-2">
+                    <code className="rounded px-3 py-2 bg-slate-900 text-sm text-emerald-300">{formData.connectionCode}</code>
+                    <button type="button" onClick={async () => { await navigator.clipboard.writeText(formData.connectionCode || ""); setMessage("Copied to clipboard."); }} className="rounded-2xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-slate-200">Copy</button>
+                    <button type="button" onClick={async () => {
+                      setGenerating(true);
+                      setMessage(null);
+                      try {
+                        const res = await generateConnectionCodeAction();
+                        if (res?.success && res.data?.connectionCode) {
+                          setFormData((f) => ({ ...f, connectionCode: res.data.connectionCode }));
+                          setMessage("New connection code generated.");
+                        } else {
+                          setMessage(res?.error || "Failed to generate code.");
+                        }
+                      } catch (err: unknown) {
+                        setMessage(err instanceof Error ? err.message : "Error generating code.");
+                      } finally {
+                        setGenerating(false);
+                      }
+                    }} className="rounded-2xl bg-emerald-500/20 px-3 py-2 text-sm text-emerald-200">Regenerate</button>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-3">
+                    <button type="button" onClick={handleGenerateCode} className="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-sm text-slate-200">{generating ? "Generating..." : "Generate Connection Code"}</button>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
           <div className="flex flex-col gap-6 rounded-3xl border border-white/10 bg-white/5 p-5 sm:flex-row sm:items-center">
             {formData.image ? (
               <img src={formData.image} alt={formData.name} className="h-24 w-24 rounded-2xl object-cover ring-2 ring-white/10" />

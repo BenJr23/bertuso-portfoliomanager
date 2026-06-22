@@ -22,6 +22,7 @@ model User {
   email         String
   emailVerified Boolean
   image         String?
+  connectionCode String?
   description      String?
   address       String?
   phoneNumber   String?
