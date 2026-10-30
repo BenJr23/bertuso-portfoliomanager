@@ -1,34 +1,41 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import AddCertification from "../components/modals/AddCertification";
 import EditCertification from "../components/modals/EditCertification";
-import type { CertificationItem } from "@/app/_actions/certifications/getcertifications";
-import type { AddCertificationInput, AddCertificationResult } from "@/app/_actions/certifications/addcertification";
-import type { EditCertificationInput, EditCertificationResult } from "@/app/_actions/certifications/editcertification";
-import type { DeleteCertificationResult } from "@/app/_actions/certifications/deletecertification";
-import type { UploadCertificationImageResult } from "@/app/_actions/certifications/uploadcertificationimage";
+import { getCertifications, type CertificationItem } from "@/app/_actions/certifications/getcertifications";
+import { addCertification } from "@/app/_actions/certifications/addcertification";
+import { editCertification } from "@/app/_actions/certifications/editcertification";
+import { deleteCertification } from "@/app/_actions/certifications/deletecertification";
+import { uploadCertificationImage } from "@/app/_actions/certifications/uploadcertificationimage";
 
-interface Props {
-  initialCertifications: CertificationItem[];
-  addCertificationAction: (input: AddCertificationInput) => Promise<AddCertificationResult>;
-  editCertificationAction: (input: EditCertificationInput) => Promise<EditCertificationResult>;
-  deleteCertificationAction: (id: string) => Promise<DeleteCertificationResult>;
-  uploadCertificationImageAction: (file: File) => Promise<UploadCertificationImageResult>;
-}
-
-export default function CertificationsClient({
-  initialCertifications,
-  addCertificationAction,
-  editCertificationAction,
-  deleteCertificationAction,
-  uploadCertificationImageAction,
-}: Props) {
-  const [certifications, setCertifications] = useState(initialCertifications);
+export default function CertificationsClient() {
+  const [certifications, setCertifications] = useState<CertificationItem[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [selected, setSelected] = useState<CertificationItem | null>(null);
   const [query, setQuery] = useState("");
+
+  useEffect(() => {
+    async function loadCertifications() {
+      try {
+        const result = await getCertifications();
+        if (result.success && result.data) {
+          setCertifications(result.data);
+        } else {
+          setError(result.error || "Failed to load certifications.");
+        }
+      } catch (loadError: unknown) {
+        setError(loadError instanceof Error ? loadError.message : "Failed to load certifications.");
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    void loadCertifications();
+  }, []);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -81,6 +88,13 @@ export default function CertificationsClient({
         </div>
       </div>
 
+      {error ? (
+        <div className="rounded-2xl border border-red-400/20 bg-red-500/10 p-4 text-sm text-red-200">{error}</div>
+      ) : null}
+
+      {isLoading ? (
+        <div className="flex items-center justify-center py-12 text-slate-300">Loading certifications...</div>
+      ) : (
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
         {filtered.length === 0 ? (
           <div className="rounded-[1.75rem] border border-white/10 bg-slate-950/70 p-8 text-slate-400">No certifications found.</div>
@@ -121,13 +135,14 @@ export default function CertificationsClient({
           ))
         )}
       </div>
+      )}
 
       <AddCertification
         open={isAddOpen}
         onClose={() => setIsAddOpen(false)}
         onAdd={(cert) => handleAdd(cert)}
-        addCertificationAction={addCertificationAction}
-        uploadCertificationImageAction={uploadCertificationImageAction}
+        addCertificationAction={addCertification}
+        uploadCertificationImageAction={uploadCertificationImage}
       />
 
       <EditCertification
@@ -140,9 +155,9 @@ export default function CertificationsClient({
         certification={selected || undefined}
         onEdit={(cert) => handleEdit(cert)}
         onDelete={(id) => handleDelete(id)}
-        editCertificationAction={editCertificationAction}
-        deleteCertificationAction={deleteCertificationAction}
-        uploadCertificationImageAction={uploadCertificationImageAction}
+        editCertificationAction={editCertification}
+        deleteCertificationAction={deleteCertification}
+        uploadCertificationImageAction={uploadCertificationImage}
       />
 
     </div>
