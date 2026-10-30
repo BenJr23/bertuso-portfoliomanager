@@ -150,6 +150,12 @@ export default function Home() {
                 />
               </div>
 
+              <div className="flex justify-end">
+                <Link href="/forgetpassword" className="text-sm font-medium text-emerald-300 transition hover:text-emerald-200">
+                  Forgot password?
+                </Link>
+              </div>
+
               {error ? (
                 <p className="rounded-2xl border border-rose-500/30 bg-rose-500/10 px-4 py-3 text-sm text-rose-200" role="alert">
                   {error}

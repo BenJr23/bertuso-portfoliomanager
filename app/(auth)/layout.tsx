@@ -17,7 +17,7 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
   // Client-side auth check as fallback
   useEffect(() => {
     if (!isPending && !session) {
-      router.push("/sign-in");
+      router.push("/");
     }
   }, [session, isPending, router]);
 

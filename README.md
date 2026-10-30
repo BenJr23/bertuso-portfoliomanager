@@ -16,6 +16,20 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+## Password reset email configuration
+
+Password reset links are sent through SMTP. Add these variables to `.env` before using the forgot-password page:
+
+```env
+SMTP_HOST="smtp.example.com"
+SMTP_PORT="587"
+SMTP_USER="your-smtp-username"
+SMTP_PASSWORD="your-smtp-password"
+SMTP_FROM="Bertuso <no-reply@example.com>"
+```
+
+Port `465` uses an encrypted SMTP connection automatically; other ports use STARTTLS when supported by the SMTP server.
+
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
