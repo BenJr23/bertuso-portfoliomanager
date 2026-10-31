@@ -39,7 +39,7 @@ export async function requireAuth() {
 
   if (!isAuthenticated) {
     const { redirect } = await import("next/navigation");
-    redirect("/sign-in");
+    redirect("/");
   }
 
   return session;
@@ -78,12 +78,12 @@ export async function proxy(request: NextRequest) {
       if (!session) {
         // Not authenticated - redirect to sign-in
         return NextResponse.redirect(
-          new URL(`/sign-in?from=${pathname}`, request.url)
+          new URL(`/?from=${pathname}`, request.url)
         );
       }
     } catch (error) {
       console.error("Proxy auth check failed:", error);
-      return NextResponse.redirect(new URL("/sign-in", request.url));
+      return NextResponse.redirect(new URL("/", request.url));
     }
   }
 

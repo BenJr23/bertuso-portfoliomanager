@@ -1,36 +1,17 @@
-"use client";
-
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 import { ReactNode } from "react";
-import { useSession } from "@/lib/auth-client";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { auth } from "@/lib/auth";
 import AppShell from "./components/AppShell";
 
-/**
- * Protected layout for authenticated routes
- * All routes inside (auth) group will require authentication
- */
-export default function AuthLayout({ children }: { children: ReactNode }) {
-  const { data: session, isPending } = useSession();
-  const router = useRouter();
-
-  // Client-side auth check as fallback
-  useEffect(() => {
-    if (!isPending && !session) {
-      router.push("/");
-    }
-  }, [session, isPending, router]);
-
-  if (isPending) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div>Loading...</div>
-      </div>
-    );
-  }
+export default async function AuthLayout({ children }: { children: ReactNode }) {
+  const cookieStore = await cookies();
+  const session = await auth.api.getSession({
+    headers: { cookie: cookieStore.toString() },
+  });
 
   if (!session) {
-    return null;
+    redirect("/");
   }
 
   return <AppShell>{children}</AppShell>;
